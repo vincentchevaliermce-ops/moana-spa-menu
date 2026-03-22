@@ -390,22 +390,8 @@
   }
   .service-card:hover::before { opacity: 1; }
 
-  .service-card.popular {
-    border-color: var(--gold-light);
-    background: linear-gradient(to bottom right, var(--white), #FFFDF5);
-  }
-  .service-card.popular::after {
-    content: 'POPULAR';
-    position: absolute;
-    top: 12px; right: -28px;
-    background: linear-gradient(135deg, var(--gold), var(--gold-light));
-    color: white;
-    font-size: 7px;
-    font-weight: 700;
-    letter-spacing: 1.5px;
-    padding: 3px 32px;
-    transform: rotate(45deg);
-  }
+  
+  
 
   .card-summary {
     display: flex;
@@ -941,7 +927,7 @@
     </div>
     <div class="services-grid">
 
-      <div class="service-card popular" onclick="this.classList.toggle('open')">
+      <div class="service-card" onclick="this.classList.toggle('open')">
         <div class="card-summary">
           <div>
             <div class="name">BB Glow Derma Pen</div>
@@ -1112,7 +1098,7 @@
         </div>
       </div>
 
-      <div class="service-card popular" onclick="this.classList.toggle('open')">
+      <div class="service-card" onclick="this.classList.toggle('open')">
         <div class="card-summary">
           <div>
             <div class="name">Body Scrub</div>
@@ -1154,7 +1140,7 @@
     </div>
     <div class="services-grid">
 
-      <div class="service-card popular" onclick="this.classList.toggle('open')">
+      <div class="service-card" onclick="this.classList.toggle('open')">
         <div class="card-summary">
           <div>
             <div class="name">Hair Spa Relaxation</div>
