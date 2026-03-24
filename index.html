@@ -464,25 +464,25 @@
   }
   .service-card:hover::before { opacity: 1; }
 
-  /* Golden glow when card is expanded */
+  /* Golden glow when card is expanded — premium spa feel */
   .service-card.open {
-    background: linear-gradient(135deg, rgba(184,134,11,0.08) 0%, rgba(212,169,48,0.13) 100%);
-    border-color: var(--gold-light);
-    box-shadow: 0 4px 24px rgba(184,134,11,0.15);
+    background: linear-gradient(145deg, #D4A537 0%, #E8B84B 45%, #D4A537 100%);
+    border: 2px solid #C9960E;
+    box-shadow: 0 8px 32px rgba(184,134,11,0.3), 0 2px 8px rgba(212,165,55,0.2);
+    transform: translateY(-2px);
   }
-  .service-card.open::before { opacity: 1; }
-  .service-card.open .name { color: var(--gold-dark); }
-  .service-card.open .price { color: var(--gold); }
-
-  /* Golden glow when card is expanded */
-  .service-card.open {
-    background: linear-gradient(135deg, rgba(184,134,11,0.08) 0%, rgba(212,169,48,0.13) 100%);
-    border-color: var(--gold-light);
-    box-shadow: 0 4px 24px rgba(184,134,11,0.15);
-  }
-  .service-card.open::before { opacity: 1; }
-  .service-card.open .name { color: var(--gold-dark); }
-  .service-card.open .price { color: var(--gold); }
+  .service-card.open::before { opacity: 0; }
+  .service-card.open .name { color: #2C1810; font-weight: 700; }
+  .service-card.open .short-desc { color: #3D2B1F; }
+  .service-card.open .price { color: #2C1810; }
+  .service-card.open .duration { color: #4A3728; }
+  .service-card.open .expand-hint { color: #3D2B1F; }
+  .service-card.open .detail-panel { border-top-color: rgba(61,43,31,0.2); }
+  .service-card.open .detail-label { color: #FFFAF0; font-weight: 600; letter-spacing: 1px; }
+  .service-card.open .detail-text { color: #2C1810; }
+  .service-card.open .detail-steps { color: #2C1810; }
+  .service-card.open .step-arrow { color: #6B4C2A; }
+  .service-card.open .best-for { color: #3D2B1F; }
 
   
   
