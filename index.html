@@ -464,6 +464,26 @@
   }
   .service-card:hover::before { opacity: 1; }
 
+  /* Golden glow when card is expanded */
+  .service-card.open {
+    background: linear-gradient(135deg, rgba(184,134,11,0.08) 0%, rgba(212,169,48,0.13) 100%);
+    border-color: var(--gold-light);
+    box-shadow: 0 4px 24px rgba(184,134,11,0.15);
+  }
+  .service-card.open::before { opacity: 1; }
+  .service-card.open .name { color: var(--gold-dark); }
+  .service-card.open .price { color: var(--gold); }
+
+  /* Golden glow when card is expanded */
+  .service-card.open {
+    background: linear-gradient(135deg, rgba(184,134,11,0.08) 0%, rgba(212,169,48,0.13) 100%);
+    border-color: var(--gold-light);
+    box-shadow: 0 4px 24px rgba(184,134,11,0.15);
+  }
+  .service-card.open::before { opacity: 1; }
+  .service-card.open .name { color: var(--gold-dark); }
+  .service-card.open .price { color: var(--gold); }
+
   
   
 
@@ -1293,7 +1313,68 @@
           <div class="best-for">Best for: desk workers, remote workers, gym-goers, chronic headaches, neck tension, stress, poor circulation</div>
         </div>
       </div>
-      
+
+      <div class="service-card" onclick="this.classList.toggle('open')">
+        <div class="card-summary">
+          <div>
+            <div class="name">Thai Massage</div>
+            <div class="short-desc">Traditional stretching &amp; pressure point therapy</div>
+          </div>
+          <div class="card-right">
+            <div class="price">$20</div>
+            <div class="duration">60 min</div>
+          </div>
+        </div>
+        <div class="expand-hint">Tap for details <span class="arrow">▾</span></div>
+        <div class="detail-panel">
+          <div class="detail-section">
+            <div class="detail-label">Description</div>
+            <div class="detail-text">Traditional Thai stretching and pressure point massage — no oil, loose clothing provided.</div>
+          </div>
+          <div class="detail-section">
+            <div class="detail-label">Includes</div>
+            <div class="detail-steps">
+              <span>Full body stretching</span><span class="step-arrow">→</span>
+              <span>Pressure point therapy</span><span class="step-arrow">→</span>
+              <span>Joint mobilization</span><span class="step-arrow">→</span>
+              <span>Deep muscle release</span><span class="step-arrow">→</span>
+              <span>Energy line work</span>
+            </div>
+          </div>
+          <div class="best-for">Best for: flexibility, muscle tension, energy boost, jet lag recovery</div>
+        </div>
+      </div>
+
+      <div class="service-card" onclick="this.classList.toggle('open')">
+        <div class="card-summary">
+          <div>
+            <div class="name">Oil Massage</div>
+            <div class="short-desc">Relaxing full body massage with warm aromatic oils</div>
+          </div>
+          <div class="card-right">
+            <div class="price">$20</div>
+            <div class="duration">60 min</div>
+          </div>
+        </div>
+        <div class="expand-hint">Tap for details <span class="arrow">▾</span></div>
+        <div class="detail-panel">
+          <div class="detail-section">
+            <div class="detail-label">Description</div>
+            <div class="detail-text">Relaxing full body massage with warm aromatic oils.</div>
+          </div>
+          <div class="detail-section">
+            <div class="detail-label">Includes</div>
+            <div class="detail-steps">
+              <span>Warm oil application</span><span class="step-arrow">→</span>
+              <span>Long flowing strokes</span><span class="step-arrow">→</span>
+              <span>Deep tissue on request</span><span class="step-arrow">→</span>
+              <span>Back, legs, arms &amp; shoulders</span><span class="step-arrow">→</span>
+              <span>Scalp massage finish</span>
+            </div>
+          </div>
+          <div class="best-for">Best for: relaxation, stress relief, dry skin, insomnia, general wellness</div>
+        </div>
+      </div>
 
     </div>
   </div>
