@@ -42,6 +42,1729 @@
     min-height: 100dvh;
   }
 
+  
+    /* Package card expand/collapse */
+    .package-card {
+      cursor: pointer;
+    }
+    .package-card .pkg-details {
+      max-height: 0;
+      overflow: hidden;
+      opacity: 0;
+      transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s, padding 0.3s;
+      text-align: left;
+      padding: 0 4px;
+    }
+    .package-card.open .pkg-details {
+      max-height: 600px;
+      opacity: 1;
+      padding-top: 14px;
+      margin-top: 14px;
+      border-top: 1px solid var(--border);
+    }
+    .package-card .pkg-detail-label {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 6px;
+    }
+    .package-card .pkg-detail-text {
+      font-size: 13px;
+      color: var(--text-light);
+      line-height: 1.6;
+      margin-bottom: 12px;
+    }
+    .package-card .pkg-detail-steps {
+      font-size: 13px;
+      color: var(--text-light);
+      line-height: 1.8;
+    }
+    .package-card .pkg-detail-steps span {
+      white-space: nowrap;
+    }
+    .package-card .pkg-detail-steps .step-arrow {
+      color: var(--gold-light);
+      margin: 0 4px;
+      font-size: 11px;
+    }
+    .package-card .pkg-tap {
+      font-size: 12px;
+      color: var(--gold);
+      margin-top: 10px;
+      opacity: 0.7;
+    }
+    .package-card .pkg-tap .arrow {
+      display: inline-block;
+      transition: transform 0.3s;
+      font-size: 8px;
+    }
+    .package-card.open .pkg-tap .arrow {
+      transform: rotate(180deg);
+    }
+
+    /* ===========================
+     ANIMATIONS
+     =========================== */
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes shimmer {
+    0% { background-position: -200% center; }
+    100% { background-position: 200% center; }
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
+  }
+  @keyframes palmSway {
+    0%, 100% { transform: rotate(0deg); }
+    50% { transform: rotate(3deg); }
+  }
+  @keyframes slideDown {
+    from { opacity: 0; max-height: 0; }
+    to { opacity: 1; max-height: 500px; }
+  }
+
+  /* Simple staggered fade-in on page load */
+  @keyframes sectionAppear {
+    from { opacity: 0; transform: translateY(18px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .animate-in {
+    animation: sectionAppear 0.6s ease both;
+  }
+  .animate-in:nth-of-type(1) { animation-delay: 0.1s; }
+  .animate-in:nth-of-type(2) { animation-delay: 0.2s; }
+  .animate-in:nth-of-type(3) { animation-delay: 0.3s; }
+  .animate-in:nth-of-type(4) { animation-delay: 0.4s; }
+  .animate-in:nth-of-type(5) { animation-delay: 0.5s; }
+  .animate-in:nth-of-type(6) { animation-delay: 0.6s; }
+  .animate-in:nth-of-type(7) { animation-delay: 0.7s; }
+  .animate-in:nth-of-type(8) { animation-delay: 0.8s; }
+  .animate-in:nth-of-type(9) { animation-delay: 0.9s; }
+
+  /* ===========================
+     DECORATIVE PALM LEAVES (SVG corners)
+     =========================== */
+  .palm-corner {
+    position: fixed;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.15;
+    animation: palmSway 8s ease-in-out infinite;
+  }
+  .palm-top-left {
+    top: -20px;
+    left: -20px;
+    width: 180px;
+    transform-origin: top left;
+  }
+  .palm-top-right {
+    top: -20px;
+    right: -20px;
+    width: 180px;
+    transform-origin: top right;
+    transform: scaleX(-1);
+    animation-delay: -4s;
+  }
+  .palm-bottom-right {
+    bottom: -20px;
+    right: -20px;
+    width: 160px;
+    transform-origin: bottom right;
+    transform: scaleX(-1) scaleY(-1);
+    animation-delay: -2s;
+  }
+
+  /* ===========================
+     HEADER
+     =========================== */
+  .header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--white);
+    padding: 14px 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1.5px solid var(--border);
+    backdrop-filter: blur(10px);
+    transition: box-shadow 0.3s ease;
+  }
+  .header.scrolled {
+    box-shadow: 0 2px 20px rgba(184,134,11,0.08);
+  }
+
+  .header-brand {
+    display: flex;
+    align-items: center;
+    gap: 0;
+  }
+
+  .brand-logo {
+    height: 44px;
+    width: auto;
+    object-fit: contain;
+  }
+
+  .header-contact {
+    text-align: right;
+    font-size: 11px;
+    color: var(--text-light);
+    line-height: 1.5;
+  }
+  .header-contact a {
+    color: var(--gold-dark);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 12px;
+    transition: color 0.3s;
+  }
+  .header-contact a:hover { color: var(--gold); }
+
+  /* ===========================
+     NAVIGATION
+     =========================== */
+  .nav-bar {
+    position: sticky;
+    top: 58px;
+    z-index: 99;
+    background: var(--white);
+    display: flex;
+    overflow-x: auto;
+    border-bottom: 1px solid rgba(184,134,11,0.1);
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    gap: 0;
+  }
+  .nav-bar::-webkit-scrollbar { display: none; }
+  .nav-bar a {
+    flex-shrink: 0;
+    padding: 14px 20px;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--text-muted);
+    border-bottom: 2px solid transparent;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+  }
+  .nav-bar a:hover { color: var(--gold); }
+  .nav-bar a.active {
+    color: var(--gold);
+    border-bottom-color: var(--gold);
+  }
+
+  /* ===========================
+     MAIN CONTENT
+     =========================== */
+  .content {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 28px 24px 60px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ===========================
+     HERO BANNER
+     =========================== */
+  .hero-banner {
+    background: linear-gradient(135deg, var(--gold-dark), var(--gold), var(--gold-light));
+    border-radius: var(--radius);
+    padding: 32px 36px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 36px;
+    position: relative;
+    overflow: hidden;
+    animation: fadeInUp 0.8s ease;
+  }
+  .hero-banner::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: linear-gradient(135deg, transparent 60%, rgba(255,255,255,0.1));
+    pointer-events: none;
+  }
+  .hero-banner::after {
+    content: '';
+    position: absolute;
+    top: -50%; right: -20%;
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-banner .tag {
+    display: inline-block;
+    background: rgba(255,255,255,0.2);
+    color: var(--white);
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    padding: 4px 14px;
+    border-radius: 20px;
+    margin-bottom: 10px;
+    backdrop-filter: blur(4px);
+  }
+  .hero-banner h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 26px;
+    font-weight: 600;
+    color: var(--white);
+    line-height: 1.2;
+    margin-bottom: 6px;
+  }
+  .hero-banner .desc {
+    font-size: 12px;
+    color: rgba(255,255,255,0.8);
+    font-weight: 300;
+  }
+  .banner-right {
+    text-align: right;
+    flex-shrink: 0;
+    margin-left: 24px;
+  }
+  .banner-right .old-price {
+    font-size: 16px;
+    color: rgba(255,255,255,0.5);
+    text-decoration: line-through;
+    font-weight: 300;
+  }
+  .banner-right .new-price {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 48px;
+    font-weight: 700;
+    color: var(--white);
+    line-height: 1;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.15);
+  }
+  .banner-right .save {
+    display: inline-block;
+    background: var(--white);
+    color: var(--gold-dark);
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    padding: 3px 10px;
+    border-radius: 6px;
+    margin-top: 4px;
+  }
+
+  /* ===========================
+     SECTIONS
+     =========================== */
+  .section {
+    margin-bottom: 36px;
+    scroll-margin-top: 120px;
+    max-width: 1100px;
+      margin-left: auto;
+      margin-right: auto;
+      padding-left: 24px;
+      padding-right: 24px;
+    }
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 18px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  .section-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--gold), var(--gold-light));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+    box-shadow: 0 2px 8px var(--gold-glow);
+  }
+  .section-header h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--text);
+    letter-spacing: 0.5px;
+  }
+
+  /* ===========================
+     DIVIDER — elegant gold line with diamond
+     =========================== */
+  .gold-divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    margin: 12px 0 32px;
+    opacity: 0.4;
+  }
+  .gold-divider::before,
+  .gold-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--gold), transparent);
+  }
+  .gold-divider .diamond {
+    width: 6px; height: 6px;
+    background: var(--gold);
+    transform: rotate(45deg);
+    flex-shrink: 0;
+  }
+
+  /* ===========================
+     SERVICE CARDS
+     =========================== */
+  .services-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+
+  .service-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    cursor: pointer;
+    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+  }
+  .service-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 4px; height: 100%;
+    background: linear-gradient(to bottom, var(--gold), var(--gold-light));
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .service-card:hover {
+    border-color: var(--gold-light);
+    box-shadow: 0 4px 20px var(--gold-glow);
+    transform: translateY(-2px);
+  }
+  .service-card:hover::before { opacity: 1; }
+
+  
+  
+
+  .card-summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+  .card-right { text-align: right; flex-shrink: 0; margin-left: 12px; }
+
+  .service-card .name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 3px;
+    line-height: 1.2;
+  }
+  .service-card .short-desc {
+    font-size: 11px;
+    color: var(--text-muted);
+    font-weight: 400;
+    line-height: 1.4;
+  }
+  .service-card .price {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--gold-dark);
+    line-height: 1;
+  }
+  .service-card .duration {
+    font-size: 10px;
+    color: var(--text-muted);
+    font-weight: 400;
+    margin-top: 2px;
+  }
+
+  .expand-hint {
+    margin-top: 10px;
+    font-size: 10px;
+    color: var(--gold);
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    text-align: center;
+    opacity: 0.7;
+    transition: opacity 0.3s;
+  }
+  .expand-hint .arrow {
+    display: inline-block;
+    transition: transform 0.3s ease;
+    font-size: 12px;
+  }
+  .service-card:hover .expand-hint { opacity: 1; }
+  .service-card.open .expand-hint .arrow { transform: rotate(180deg); }
+
+  /* Detail panel */
+  .detail-panel {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1), padding 0.3s, opacity 0.4s;
+    opacity: 0;
+    border-top: 0px solid transparent;
+  }
+  .service-card.open .detail-panel {
+    max-height: 800px;
+    opacity: 1;
+    padding-top: 14px;
+    margin-top: 14px;
+    border-top: 1px solid var(--border);
+  }
+
+  .detail-section { margin-bottom: 10px; }
+  .detail-label {
+    font-size: 8px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 4px;
+  }
+  .detail-text {
+    font-size: 12px;
+    color: var(--text-light);
+    line-height: 1.6;
+    font-weight: 300;
+  }
+  .detail-steps {
+    font-size: 11px;
+    color: var(--text-light);
+    line-height: 1.8;
+    font-weight: 300;
+  }
+  .detail-steps .step-arrow {
+    color: var(--gold-light);
+    margin: 0 4px;
+    font-size: 10px;
+  }
+  .addon-note {
+    display: inline-block;
+    background: var(--gold-pale);
+    color: var(--gold-dark);
+    font-size: 11px;
+    font-weight: 500;
+    padding: 4px 12px;
+    border-radius: 6px;
+    margin-top: 6px;
+  }
+  .best-for {
+    font-size: 10px;
+    color: var(--text-muted);
+    font-style: italic;
+    margin-top: 6px;
+    padding-top: 6px;
+    border-top: 1px dashed rgba(184,134,11,0.15);
+  }
+
+  /* ===========================
+     HANDS & FEET — Combo Deals
+     =========================== */
+  .hands-combo-label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin: 28px 0 16px;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--gold-dark);
+    letter-spacing: 0.5px;
+  }
+  .hands-combo-label::before,
+  .hands-combo-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--gold-light), transparent);
+    opacity: 0.4;
+  }
+  .combo-icon { font-size: 16px; }
+  .combo-card {
+    background: linear-gradient(135deg, #FFFEF9 0%, #FFF8E1 100%) !important;
+    border: 1.5px solid var(--gold-light) !important;
+    position: relative;
+  }
+  .combo-card::after {
+    content: 'SAVE';
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: linear-gradient(135deg, var(--gold), var(--gold-light));
+    color: white;
+    font-size: 8px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    padding: 2px 8px;
+    border-radius: 4px;
+  }
+  .hands-combos-grid {
+    grid-template-columns: 1fr 1fr !important;
+  }
+  @media (max-width: 600px) {
+    .hands-combos-grid {
+      grid-template-columns: 1fr !important;
+    }
+  }
+
+  /* ===========================
+     WAXING GRID
+     =========================== */
+  .waxing-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+  }
+  .wax-item {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 14px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.3s ease;
+  }
+  .wax-item:hover {
+    border-color: var(--gold-light);
+    box-shadow: 0 2px 12px var(--gold-glow);
+    transform: translateY(-1px);
+  }
+  .wax-item .wax-name {
+    font-size: 12px;
+    color: var(--text);
+    font-weight: 400;
+  }
+  .wax-item .wax-price {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--gold-dark);
+  }
+
+  /* ===========================
+     PACKAGES
+     =========================== */
+  .packages-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+  .package-card {
+    background: var(--white);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px 22px;
+    text-align: center;
+    transition: all 0.35s ease;
+    position: relative;
+  }
+  .package-card:hover {
+    border-color: var(--gold);
+    box-shadow: 0 8px 30px var(--gold-glow);
+    transform: translateY(-4px);
+  }
+  .package-card.best {
+    border-color: var(--gold);
+    background: linear-gradient(to bottom, #FFFEF9, #FFF9E8);
+    box-shadow: 0 4px 20px var(--gold-glow);
+  }
+  .package-card.best::before {
+    content: 'BEST VALUE';
+    position: absolute;
+    top: -10px; left: 50%;
+    transform: translateX(-50%);
+    background: linear-gradient(135deg, var(--gold), var(--gold-light));
+    color: white;
+    font-size: 8px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    padding: 3px 14px;
+    border-radius: 10px;
+    white-space: nowrap;
+  }
+
+  .pkg-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 2px;
+  }
+  .pkg-duration {
+    font-size: 10px;
+    color: var(--text-muted);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .pkg-items {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 18px;
+  }
+  .pkg-items span {
+    font-size: 12px;
+    color: var(--text-light);
+    font-weight: 300;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+  }
+  .pkg-items span::before {
+    content: '◆';
+    color: var(--gold-light);
+    font-size: 6px;
+  }
+  .pkg-price {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 40px;
+    font-weight: 700;
+    color: var(--gold-dark);
+    line-height: 1;
+  }
+
+  /* ===========================
+     LOYALTY
+     =========================== */
+  .loyalty-banner {
+    background: linear-gradient(135deg, var(--gold), var(--gold-light));
+    border-radius: var(--radius);
+    padding: 24px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 28px;
+    position: relative;
+    overflow: hidden;
+    max-width: 1100px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+  .loyalty-banner::after {
+    content: '';
+    position: absolute;
+    top: -40%; right: -10%;
+    width: 200px; height: 200px;
+    background: radial-gradient(circle, rgba(255,255,255,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .loyalty-banner h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--white);
+  }
+  .loyalty-banner p {
+    font-size: 12px;
+    color: rgba(255,255,255,0.8);
+    font-weight: 300;
+  }
+  .loyalty-badge {
+    background: var(--white);
+    color: var(--gold-dark);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 16px;
+    font-weight: 700;
+    padding: 10px 20px;
+    border-radius: var(--radius-sm);
+    white-space: nowrap;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    z-index: 1;
+  }
+
+  /* ===========================
+     QR CODE
+     =========================== */
+  .qr-section {
+    background: var(--white);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    padding: 32px;
+    margin-top: 28px;
+    text-align: center;
+  }
+  .qr-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--gold);
+    margin-bottom: 4px;
+  }
+  .qr-subtitle {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-bottom: 18px;
+    font-weight: 300;
+  }
+  #qrcode {
+    display: inline-block;
+    padding: 14px;
+    border: 2px solid var(--gold-pale);
+    border-radius: 14px;
+    background: var(--white);
+  }
+  #qrcode img, #qrcode canvas { display: block; }
+  .qr-url {
+    margin-top: 12px;
+    font-size: 10px;
+    color: var(--text-muted);
+    word-break: break-all;
+    font-weight: 300;
+  }
+
+  /* ===========================
+     FOOTER
+     =========================== */
+  .footer {
+    background: var(--white);
+    border-top: 1.5px solid var(--border);
+    padding: 28px 24px;
+    text-align: center;
+    margin-top: 36px;
+  }
+  .footer .footer-hours {
+    font-family: 'Cormorant Garamond', serif;
+    color: var(--gold);
+    font-weight: 600;
+    font-size: 14px;
+    margin-bottom: 8px;
+    letter-spacing: 0.5px;
+  }
+  .footer .footer-info {
+    font-size: 12px;
+    color: var(--text-muted);
+    line-height: 1.8;
+    font-weight: 300;
+  }
+  .footer a {
+    color: var(--gold-dark);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s;
+  }
+  .footer a:hover { color: var(--gold); }
+  .footer .footer-ig {
+    margin-top: 10px;
+    font-size: 13px;
+    color: var(--gold);
+    font-weight: 600;
+    letter-spacing: 2px;
+  }
+  .footer .footer-brand {
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid var(--border);
+    opacity: 0.4;
+    font-size: 10px;
+    color: var(--text-muted);
+  }
+
+  /* ===========================
+     RESPONSIVE — PORTRAIT (<850px)
+     =========================== */
+  @media (max-width: 850px) {
+    .hero-banner {
+      flex-direction: column;
+      text-align: center;
+      padding: 26px 22px;
+      gap: 16px;
+    }
+    .banner-right { margin-left: 0; }
+    .services-grid { grid-template-columns: 1fr 1fr; }
+    .packages-grid { grid-template-columns: 1fr; gap: 14px; }
+    .waxing-grid { grid-template-columns: 1fr 1fr; }
+  }
+
+  /* ===========================
+     LANDSCAPE (>850px)
+     =========================== */
+  @media (min-width: 851px) {
+    .services-grid { grid-template-columns: 1fr 1fr 1fr; }
+    .waxing-grid { grid-template-columns: repeat(4, 1fr); }
+  }
+
+  /* ===========================
+     PHONE (<520px)
+     =========================== */
+  @media (max-width: 520px) {
+    .header {
+      flex-direction: column;
+      gap: 8px;
+      text-align: center;
+      padding: 12px 16px;
+    }
+    .header-brand { justify-content: center; }
+    .header-contact { text-align: center; font-size: 10px; }
+    .brand-logo { height: 36px; }
+
+    .nav-bar { top: 78px; padding: 0 8px; }
+    .nav-bar a { padding: 12px 14px; font-size: 10px; letter-spacing: 1.5px; }
+
+    .content { padding: 16px 14px 60px; }
+
+    .hero-banner { padding: 22px 18px; margin-bottom: 24px; }
+    .hero-banner .tag { font-size: 8px; }
+    .hero-banner h2 { font-size: 20px; }
+    .hero-banner .desc { font-size: 11px; }
+    .banner-right .new-price { font-size: 36px; }
+
+    .section { margin-bottom: 26px; scroll-margin-top: 140px; }
+    .section-header h2 { font-size: 20px; }
+    .section-icon { width: 30px; height: 30px; font-size: 14px; }
+
+    .services-grid { grid-template-columns: 1fr; gap: 12px; }
+    .service-card { padding: 16px; }
+    .service-card .name { font-size: 16px; }
+    .service-card .short-desc { font-size: 11px; }
+    .service-card .price { font-size: 24px; }
+
+    .waxing-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+    .wax-item { padding: 12px 14px; }
+    .wax-item .wax-name { font-size: 11px; }
+    .wax-item .wax-price { font-size: 16px; }
+
+    .packages-grid { grid-template-columns: 1fr; }
+    .package-card { padding: 22px 18px; }
+    .pkg-name { font-size: 20px; }
+    .pkg-price { font-size: 34px; }
+
+    .loyalty-banner {
+      flex-direction: column;
+      text-align: center;
+      gap: 14px;
+      padding: 22px 18px;
+    }
+
+    .palm-corner { display: none; }
+  }
+
+  /* ===========================
+     VERY SMALL PHONE (<360px)
+     =========================== */
+  @media (max-width: 360px) {
+    .brand-logo { height: 30px; }
+    .hero-banner h2 { font-size: 17px; }
+    .banner-right .new-price { font-size: 30px; }
+    .waxing-grid { grid-template-columns: 1fr; }
+    .service-card .price { font-size: 20px; }
+    .pkg-price { font-size: 28px; }
+  }
+
+  @media print {
+    .qr-section { break-inside: avoid; page-break-inside: avoid; }
+    .palm-corner { display: none; }
+  }
+
+  ::-webkit-scrollbar { width: 0; height: 0; }
+  body { scrollbar-width: none; }
+.fade-in{opacity:0;transform:translateY(16px);transition:opacity .5s ease,transform .5s ease}.fade-in.visible{opacity:1;transform:translateY(0)}
+</style>
+</head>
+<body>
+
+<!-- DECORATIVE PALM LEAVES -->
+<svg class="palm-corner palm-top-left" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <g fill="none" stroke="#B8860B" stroke-width="1.5" stroke-linecap="round">
+    <path d="M10,10 Q60,30 90,80 Q70,50 30,25 Z" fill="#B8860B" opacity="0.3"/>
+    <path d="M10,10 Q40,50 50,100 Q30,60 15,30 Z" fill="#B8860B" opacity="0.25"/>
+    <path d="M10,10 Q25,60 20,120 Q15,70 10,35 Z" fill="#B8860B" opacity="0.2"/>
+    <path d="M10,10 Q80,20 130,50 Q80,30 40,18 Z" fill="#B8860B" opacity="0.25"/>
+    <path d="M10,10 Q70,10 140,30 Q80,15 35,12 Z" fill="#B8860B" opacity="0.2"/>
+  </g>
+</svg>
+<svg class="palm-corner palm-top-right" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <g fill="none" stroke="#B8860B" stroke-width="1.5" stroke-linecap="round">
+    <path d="M10,10 Q60,30 90,80 Q70,50 30,25 Z" fill="#B8860B" opacity="0.3"/>
+    <path d="M10,10 Q40,50 50,100 Q30,60 15,30 Z" fill="#B8860B" opacity="0.25"/>
+    <path d="M10,10 Q25,60 20,120 Q15,70 10,35 Z" fill="#B8860B" opacity="0.2"/>
+    <path d="M10,10 Q80,20 130,50 Q80,30 40,18 Z" fill="#B8860B" opacity="0.25"/>
+  </g>
+</svg>
+
+<!-- ======== HEADER ======== -->
+<div class="header" id="main-header">
+  <div class="header-brand">
+    <img class="brand-logo" src="logo.svg" alt="MOANA Beauty Spa">
+  </div>
+  <div class="header-contact">
+    <a href="tel:+855096857896"><a href="https://wa.me/855096857896" style="color:#B8860B;text-decoration:none">+855 09 68 57 85 96</a></a><br>
+    Tue – Sun · 9 AM – 9 PM
+  </div>
+</div>
+
+<!-- ======== NAVIGATION ======== -->
+<nav class="nav-bar">
+  <a href="#face">Face</a>
+  <a href="#body">Body</a>
+  <a href="#hair">Hair</a>
+  <a href="#hands">Hands & Feet</a>
+  <a href="#waxing">Waxing</a>
+  <a href="#packages">Packages</a>
+</nav>
+
+<!-- ======== MAIN CONTENT ======== -->
+<div class="content">
+
+  <!-- HERO COMBO -->
+  <div class="hero-banner">
+    <div>
+      <div class="tag">Combo Deal</div>
+      <h2>BB Glow + Hair Spa Relaxation</h2>
+      <div class="desc">Our signature treatments combined — radiant skin &amp; silky hair in one session</div>
+    </div>
+    <div class="banner-right">
+      <div class="old-price">$60</div>
+      <div class="new-price">$50</div>
+      <div class="save">SAVE $10</div>
+    </div>
+  </div>
+
+  <!-- ====== FACE ====== -->
+  <div class="section animate-in" id="face">
+    <div class="section-header">
+      <div class="section-icon">✨</div>
+      <h2>Face Treatments</h2>
+    </div>
+    <div class="services-grid">
+
+      <div class="service-card" onclick="this.classList.toggle('open')">
+        <div class="card-summary">
+          <div>
+            <div class="name">BB Glow Derma Pen</div>
+            <div class="short-desc">Semi-permanent foundation for flawless skin</div>
+          </div>
+          <div class="card-right">
+            <div class="price">$45</div>
+            <div class="duration">60 min</div>
+          </div>
+        </div>
+        <div class="expand-hint">Tap for details <span class="arrow">▾</span></div>
+        <div class="detail-panel">
+          <div class="detail-section">
+            <div class="detail-label">Description</div>
+            <div class="detail-text">Achieve a flawless, radiant complexion without daily makeup. Micro-needling infuses BB serum into the upper layers of your skin for a natural, even-toned glow lasting 2–4 weeks.</div>
+          </div>
+          <div class="detail-section">
+            <div class="detail-label">Includes</div>
+            <div class="detail-steps">
+              <span>Deep cleansing</span><span class="step-arrow">→</span>
+              <span>Gentle exfoliation</span><span class="step-arrow">→</span>
+              <span>BB serum with derma pen</span><span class="step-arrow">→</span>
+              <span>Hydrating serum</span><span class="step-arrow">→</span>
+              <span>Collagen mask</span><span class="step-arrow">→</span>
+              <span>SPF moisturizer</span>
+            </div>
+          </div>
+          <div class="detail-section">
+            <div class="detail-label">Benefits</div>
+            <div class="detail-text">Evens skin tone, reduces pores, diminishes dark spots, stimulates collagen. Semi-permanent coverage.</div>
+          </div>
+          <div class="best-for">Best for: uneven skin tone, dark spots, large pores</div>
+        </div>
+      </div>
+
+      <div class="service-card" onclick="this.classList.toggle('open')">
+        <div class="card-summary">
+          <div>
+            <div class="name">Face Lifting</div>
+            <div class="short-desc">RF micro-current for firmer, younger skin</div>
+          </div>
+          <div class="card-right">
+            <div class="price">$35</div>
+            <div class="duration">45 min</div>
+          </div>
+        </div>
+        <div class="expand-hint">Tap for details <span class="arrow">▾</span></div>
+        <div class="detail-panel">
+          <div class="detail-section">
+            <div class="detail-label">Description</div>
+            <div class="detail-text">Non-invasive facial rejuvenation using Radio Frequency and micro-current technology. Tightens, lifts and redefines facial contours for visibly firmer skin.</div>
+          </div>
+          <div class="detail-section">
+            <div class="detail-label">Includes</div>
+            <div class="detail-steps">
+              <span>Skin analysis</span><span class="step-arrow">→</span>
+              <span>Cleansing</span><span class="step-arrow">→</span>
+              <span>Conductive gel</span><span class="step-arrow">→</span>
+              <span>RF treatment</span><span class="step-arrow">→</span>
+              <span>Lifting massage</span><span class="step-arrow">→</span>
+              <span>Firming mask</span>
+            </div>
+          </div>
+          <div class="best-for">Best for: sagging skin, fine lines, loss of firmness</div>
+        </div>
+      </div>
+
+      <div class="service-card" onclick="this.classList.toggle('open')">
+        <div class="card-summary">
+          <div>
+            <div class="name">Face Massage</div>
+            <div class="short-desc">Pressure points &amp; lymphatic drainage</div>
+          </div>
+          <div class="card-right">
+            <div class="price">$19</div>
+            <div class="duration">45 min</div>
+          </div>
+        </div>
+        <div class="expand-hint">Tap for details <span class="arrow">▾</span></div>
+        <div class="detail-panel">
+          <div class="detail-section">
+            <div class="detail-label">Description</div>
+            <div class="detail-text">Deeply relaxing facial massage combining Asian pressure point techniques with lymphatic drainage. Releases tension, reduces puffiness and promotes natural radiance.</div>
+          </div>
+          <div class="detail-section">
+            <div class="detail-label">Includes</div>
+            <div class="detail-steps">
+              <span>Cleansing</span><span class="step-arrow">→</span>
+              <span>Warm towel</span><span class="step-arrow">→</span>
+              <span>Pressure point massage</span><span class="step-arrow">→</span>
+              <span>Lymphatic drainage</span><span class="step-arrow">→</span>
+              <span>Nourishing cream</span>
+            </div>
+          </div>
+          <div class="best-for">Best for: tension, puffiness, dark circles, relaxation</div>
+        </div>
+      </div>
+
+      <div class="service-card" onclick="this.classList.toggle('open')">
+        <div class="card-summary">
+          <div>
+            <div class="name">ASMR Facial</div>
+            <div class="short-desc">Gentle sensory relaxation experience</div>
+          </div>
+          <div class="card-right">
+            <div class="price">$19</div>
+            <div class="duration">45 min</div>
+          </div>
+        </div>
+        <div class="expand-hint">Tap for details <span class="arrow">▾</span></div>
+        <div class="detail-panel">
+          <div class="detail-section">
+            <div class="detail-label">Description</div>
+            <div class="detail-text">A unique sensory experience combining gentle skincare with ASMR techniques. Soft brushes, light tapping and whisper-quiet movements create deep, tingle-inducing calm.</div>
+          </div>
+          <div class="detail-section">
+            <div class="detail-label">Includes</div>
+            <div class="detail-steps">
+              <span>Soft brush cleansing</span><span class="step-arrow">→</span>
+              <span>ASMR tapping</span><span class="step-arrow">→</span>
+              <span>Feather-light massage</span><span class="step-arrow">→</span>
+              <span>Hydrating mist</span>
+            </div>
+          </div>
+          <div class="best-for">Best for: stress relief, anxiety, jet lag, insomnia</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ====== BODY ====== -->
+  <div class="section animate-in" id="body">
+    <div class="section-header">
+      <div class="section-icon">🧖</div>
+      <h2>Body Treatments</h2>
+    </div>
+    <div class="services-grid">
+
+      <div class="service-card" onclick="this.classList.toggle('open')">
+        <div class="card-summary">
+          <div>
+            <div class="name">Back Massage</div>
+            <div class="short-desc">Deep tissue — shoulders, back &amp; neck</div>
+          </div>
+          <div class="card-right">
+            <div class="price">$19</div>
+            <div class="duration">60 min</div>
+          </div>
+        </div>
+        <div class="expand-hint">Tap for details <span class="arrow">▾</span></div>
+        <div class="detail-panel">
+          <div class="detail-section">
+            <div class="detail-label">Description</div>
+            <div class="detail-text">Targeted deep tissue massage for shoulders, upper and lower back, and neck. Relieves chronic tension, loosens knots and restores mobility.</div>
+          </div>
+          <div class="detail-section">
+            <div class="detail-label">Includes</div>
+            <div class="detail-steps">
+              <span>Hot towel warm-up</span><span class="step-arrow">→</span>
+              <span>Deep tissue massage</span><span class="step-arrow">→</span>
+              <span>Pressure point work</span><span class="step-arrow">→</span>
+              <span>Stretching</span><span class="step-arrow">→</span>
+              <span>Warm oil finish</span>
+            </div>
+          </div>
+          <div class="best-for">Best for: desk workers, travelers, back pain</div>
+        </div>
+      </div>
+
+      <div class="service-card" onclick="this.classList.toggle('open')">
+        <div class="card-summary">
+          <div>
+            <div class="name">Body Scrub</div>
+            <div class="short-desc">Full-body exfoliation for glowing skin</div>
+          </div>
+          <div class="card-right">
+            <div class="price">$29</div>
+            <div class="duration">60 min</div>
+          </div>
+        </div>
+        <div class="expand-hint">Tap for details <span class="arrow">▾</span></div>
+        <div class="detail-panel">
+          <div class="detail-section">
+            <div class="detail-label">Description</div>
+            <div class="detail-text">Full-body exfoliation with natural scrub ingredients. Buffs away dead skin cells, smooths rough patches and reveals fresh, glowing skin.</div>
+          </div>
+          <div class="detail-section">
+            <div class="detail-label">Includes</div>
+            <div class="detail-steps">
+              <span>Warm shower</span><span class="step-arrow">→</span>
+              <span>Full-body scrub</span><span class="step-arrow">→</span>
+              <span>Massage during exfoliation</span><span class="step-arrow">→</span>
+              <span>Warm rinse</span><span class="step-arrow">→</span>
+              <span>Moisturizing lotion</span>
+            </div>
+          </div>
+          <div class="best-for">Best for: rough skin, uneven texture, post-travel refresh</div>
+        </div>
+      </div>
+      <div class="service-card" onclick="this.classList.toggle('open')">
+        <div class="card-summary">
+          <div>
+            <div class="name">Office Syndrome Back Spa</div>
+            <div class="short-desc">Back, shoulder, neck massage + lymphatic drainage & Gua Sha</div>
+          </div>
+          <div class="card-right">
+            <div class="price">$19</div>
+            <div class="duration">60 min</div>
+          </div>
+        </div>
+        <div class="expand-hint">Tap for details <span class="arrow">▾</span></div>
+        <div class="detail-panel">
+          <div class="detail-section">
+            <div class="detail-label">Description</div>
+            <div class="detail-text">Targeted deep tissue massage for back, shoulders, neck and upper back, combined with lymphatic drainage and traditional Gua Sha scraping technique. Releases chronic tension, loosens knots, flushes toxins and boosts circulation.</div>
+          </div>
+          <div class="detail-section">
+            <div class="detail-label">Includes</div>
+            <div class="detail-steps">
+              <span>Hot towel warm-up</span><span class="step-arrow">→</span>
+              <span>Deep tissue back massage</span><span class="step-arrow">→</span>
+              <span>Shoulder & neck release</span><span class="step-arrow">→</span>
+              <span>Upper back pressure points</span><span class="step-arrow">→</span>
+              <span>Lymphatic drainage massage</span><span class="step-arrow">→</span>
+              <span>Gua Sha scraping massage</span><span class="step-arrow">→</span>
+              <span>Stretching</span><span class="step-arrow">→</span>
+              <span>Warm oil finish</span>
+            </div>
+          </div>
+          <div class="detail-section">
+            <div class="detail-label">About Gua Sha</div>
+            <div class="detail-text">Ancient Chinese technique using smooth tools to scrape the skin, releasing muscle tension, detoxifying tissues and improving oxygen supply to the skin.</div>
+          </div>
+          <div class="best-for">Best for: desk workers, remote workers, gym-goers, chronic headaches, neck tension, stress, poor circulation</div>
+        </div>
+      </div>
+      
+
+    </div>
+  </div>
+
+  <!-- ====== HAIR ====== -->
+  <div class="section animate-in" id="hair">
+    <div class="section-header">
+      <div class="section-icon">🌿</div>
+      <h2>Hair Care</h2>
+    </div>
+    <div class="services-grid">
+
+      <div class="service-card" onclick="this.classList.toggle('open')">
+        <div class="card-summary">
+          <div>
+            <div class="name">Hair Spa Relaxation</div>
+            <div class="short-desc">Vietnamese-style — ginger oil &amp; herbal mask</div>
+          </div>
+          <div class="card-right">
+            <div class="price">$15</div>
+            <div class="duration">60 min</div>
+          </div>
+        </div>
+        <div class="expand-hint">Tap for details <span class="arrow">▾</span></div>
+        <div class="detail-panel">
+          <div class="detail-section">
+            <div class="detail-label">Description</div>
+            <div class="detail-text">Vietnamese-style deep treatment with ginger oil and herbal mask. Repairs, nourishes and strengthens damaged hair. Includes shoulder massage and blow-dry.</div>
+          </div>
+          <div class="detail-section">
+            <div class="detail-label">Includes</div>
+            <div class="detail-steps">
+              <span>Scalp analysis</span><span class="step-arrow">→</span>
+              <span>Ginger oil scalp massage</span><span class="step-arrow">→</span>
+              <span>Herbal mask</span><span class="step-arrow">→</span>
+              <span>Steam treatment</span><span class="step-arrow">→</span>
+              <span>Shoulder massage</span><span class="step-arrow">→</span>
+              <span>Blow-dry styling</span>
+            </div>
+          </div>
+          <div class="addon-note">+ $10 — Add back massage</div>
+          <div class="best-for">Best for: damaged hair, dry scalp, frizz, relaxation</div>
+        </div>
+      </div>
+
+      <div class="service-card" onclick="this.classList.toggle('open')">
+        <div class="card-summary">
+          <div>
+            <div class="name">Hair Wash &amp; Blow-dry</div>
+            <div class="short-desc">Quick refresh with scalp massage</div>
+          </div>
+          <div class="card-right">
+            <div class="price">$6</div>
+            <div class="duration">45 min</div>
+          </div>
+        </div>
+        <div class="expand-hint">Tap for details <span class="arrow">▾</span></div>
+        <div class="detail-panel">
+          <div class="detail-section">
+            <div class="detail-label">Description</div>
+            <div class="detail-text">Relaxing shampoo with scalp massage, conditioning treatment and professional blow-dry styling. The perfect quick refresh.</div>
+          </div>
+          <div class="detail-section">
+            <div class="detail-label">Includes</div>
+            <div class="detail-steps">
+              <span>Relaxing shampoo</span><span class="step-arrow">→</span>
+              <span>Scalp massage</span><span class="step-arrow">→</span>
+              <span>Conditioning</span><span class="step-arrow">→</span>
+              <span>Professional blow-dry</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ====== HANDS & FEET ====== -->
+  <div class="section animate-in" id="hands">
+    <div class="section-header">
+      <div class="section-icon">💅</div>
+      <h2>Hands &amp; Feet</h2>
+    </div>
+
+    <!-- Individual services -->
+    <div class="services-grid">
+
+      <div class="service-card" onclick="this.classList.toggle('open')">
+        <div class="card-summary">
+          <div>
+            <div class="name">Manicure</div>
+            <div class="short-desc">Classic polish - hands</div>
+          </div>
+          <div class="card-right">
+            <div class="price">$10</div>
+            <div class="duration">30 min</div>
+          </div>
+        </div>
+        <div class="expand-hint">Tap for details <span class="arrow">▾</span></div>
+        <div class="detail-panel">
+          <div class="detail-section">
+            <div class="detail-label">Description</div>
+            <div class="detail-text">Classic hand care with nail shaping, cuticle treatment, hand massage and polish application for beautiful, well-groomed nails.</div>
+          </div>
+          <div class="detail-section">
+            <div class="detail-label">Includes</div>
+            <div class="detail-steps">
+              <span>Nail shaping</span><span class="step-arrow">→</span>
+              <span>Cuticle care</span><span class="step-arrow">→</span>
+              <span>Hand scrub</span><span class="step-arrow">→</span>
+              <span>Hand massage</span><span class="step-arrow">→</span>
+              <span>Classic polish</span>
+            </div>
+          </div>
+          <div class="best-for">Best for: hand care, polished look, quick pampering</div>
+        </div>
+      </div>
+
+      <div class="service-card" onclick="this.classList.toggle('open')">
+        <div class="card-summary">
+          <div>
+            <div class="name">Pedicure</div>
+            <div class="short-desc">Classic polish - feet</div>
+          </div>
+          <div class="card-right">
+            <div class="price">$10</div>
+            <div class="duration">30 min</div>
+          </div>
+        </div>
+        <div class="expand-hint">Tap for details <span class="arrow">▾</span></div>
+        <div class="detail-panel">
+          <div class="detail-section">
+            <div class="detail-label">Description</div>
+            <div class="detail-text">Relaxing foot care with nail shaping, cuticle treatment, foot massage and classic polish application for beautiful, well-groomed feet.</div>
+          </div>
+          <div class="detail-section">
+            <div class="detail-label">Includes</div>
+            <div class="detail-steps">
+              <span>Foot soak</span><span class="step-arrow">→</span>
+              <span>Nail shaping</span><span class="step-arrow">→</span>
+              <span>Cuticle care</span><span class="step-arrow">→</span>
+              <span>Foot scrub</span><span class="step-arrow">→</span>
+              <span>Foot massage</span><span class="step-arrow">→</span>
+              <span>Classic polish</span>
+            </div>
+          </div>
+          <div class="best-for">Best for: foot care, relaxation, sandal-ready feet</div>
+        </div>
+      </div>
+
+      <div class="service-card" onclick="this.classList.toggle('open')">
+        <div class="card-summary">
+          <div>
+            <div class="name">Gel Nail Polish</div>
+            <div class="short-desc">Gel application - hands or feet</div>
+          </div>
+          <div class="card-right">
+            <div class="price">$15</div>
+            <div class="duration">45 min</div>
+          </div>
+        </div>
+        <div class="expand-hint">Tap for details <span class="arrow">▾</span></div>
+        <div class="detail-panel">
+          <div class="detail-section">
+            <div class="detail-label">Description</div>
+            <div class="detail-text">Professional gel polish application on hands or feet. Chip-resistant, high-shine finish lasting 2-3 weeks with UV curing technology.</div>
+          </div>
+          <div class="detail-section">
+            <div class="detail-label">Includes</div>
+            <div class="detail-steps">
+              <span>Nail prep &amp; shaping</span><span class="step-arrow">→</span>
+              <span>Cuticle care</span><span class="step-arrow">→</span>
+              <span>Gel base coat</span><span class="step-arrow">→</span>
+              <span>Color application (2 coats)</span><span class="step-arrow">→</span>
+              <span>UV curing</span><span class="step-arrow">→</span>
+              <span>Top coat &amp; finish</span>
+            </div>
+          </div>
+          <div class="best-for">Best for: chip-free nails, busy lifestyle, special events</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Combo separator -->
+    <div class="hands-combo-label">
+      <span class="combo-icon">✨</span> Combo Deals — Save more
+    </div>
+
+    <!-- Combo deals -->
+    <div class="services-grid hands-combos-grid">
+
+      <div class="service-card combo-card" onclick="this.classList.toggle('open')">
+        <div class="card-summary">
+          <div>
+            <div class="name">Manicure + Pedicure Combo</div>
+            <div class="short-desc">Classic polish - hands &amp; feet</div>
+          </div>
+          <div class="card-right">
+            <div class="price">$15</div>
+            <div class="duration">45 min</div>
+          </div>
+        </div>
+        <div class="expand-hint">Tap for details <span class="arrow">▾</span></div>
+        <div class="detail-panel">
+          <div class="detail-section">
+            <div class="detail-label">Description</div>
+            <div class="detail-text">Classic manicure and pedicure in one session. Your hands and feet get the full pampering treatment with traditional polish for a clean, polished look.</div>
+          </div>
+          <div class="detail-section">
+            <div class="detail-label">Includes</div>
+            <div class="detail-steps">
+              <span>Warm soak</span><span class="step-arrow">→</span>
+              <span>Nail shaping</span><span class="step-arrow">→</span>
+              <span>Cuticle care</span><span class="step-arrow">→</span>
+              <span>Hand/foot scrub</span><span class="step-arrow">→</span>
+              <span>Moisturizing massage</span><span class="step-arrow">→</span>
+              <span>Polish</span>
+            </div>
+          </div>
+          <div class="best-for">Best for: quick refresh, everyday elegance, budget-friendly pampering</div>
+        </div>
+      </div>
+
+      <div class="service-card combo-card" onclick="this.classList.toggle('open')">
+        <div class="card-summary">
+          <div>
+            <div class="name">Mani + Pedi Combo Gel</div>
+            <div class="short-desc">Gel polish - hands &amp; feet</div>
+          </div>
+          <div class="card-right">
+            <div class="price">$22</div>
+            <div class="duration">60 min</div>
+          </div>
+        </div>
+        <div class="expand-hint">Tap for details <span class="arrow">▾</span></div>
+        <div class="detail-panel">
+          <div class="detail-section">
+            <div class="detail-label">Description</div>
+            <div class="detail-text">Complete gel manicure and pedicure combo. Long-lasting gel polish applied to both hands and feet for a flawless, chip-free finish lasting 2-3 weeks.</div>
+          </div>
+          <div class="detail-section">
+            <div class="detail-label">Includes</div>
+            <div class="detail-steps">
+              <span>Nail shaping</span><span class="step-arrow">→</span>
+              <span>Cuticle care</span><span class="step-arrow">→</span>
+              <span>Hand &amp; foot massage</span><span class="step-arrow">→</span>
+              <span>Gel base coat</span><span class="step-arrow">→</span>
+              <span>Gel color (2 coats)</span><span class="step-arrow">→</span>
+              <span>UV cure</span><span class="step-arrow">→</span>
+              <span>Top coat</span>
+            </div>
+          </div>
+          <div class="best-for">Best for: long-lasting finish, special occasions, busy schedules</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ====== WAXING ====== -->
+  <div class="section animate-in" id="waxing">
+    <div class="section-header">
+      <div class="section-icon">🪒</div>
+      <h2>Waxing</h2>
+    </div>
+    <div class="waxing-grid">
+      <div class="wax-item"><span class="wax-name">Full Face</span><span class="wax-price">$12</span></div>
+      <div class="wax-item"><span class="wax-name">Upper Lip</span><span class="wax-price">$5</span></div>
+      <div class="wax-item"><span class="wax-name">Eyebrows</span><span class="wax-price">$5</span></div>
+      <div class="wax-item"><span class="wax-name">Underarms</span><span class="wax-price">$8</span></div>
+      <div class="wax-item"><span class="wax-name">Half Arms</span><span class="wax-price">$10</span></div>
+      <div class="wax-item"><span class="wax-name">Full Arms</span><span class="wax-price">$15</span></div>
+      <div class="wax-item"><span class="wax-name">Half Legs</span><span class="wax-price">$12</span></div>
+      <div class="wax-item"><span class="wax-name">Full Legs</span><span class="wax-price">$20</span></div>
+      <div class="wax-item"><span class="wax-name">Brazilian</span><span class="wax-price">$28</span></div>
+    </div>
+  </div>
+
+  <!-- ====== PACKAGES ====== -->
+  <div class="section animate-in" id="packages">
+    <div class="section-header">
+      <div class="section-icon">⭐</div>
+      <h2>Packages</h2>
+    </div>
+    <div class="packages-grid">
+
+      <div class="package-card" onclick="this.classList.toggle('open')">
+        <div class="pkg-name">Discovery</div>
+        <div class="pkg-duration">~2 hours</div>
+        <div class="pkg-items">
+          <span>Face Massage (45 min)</span>
+          <span>Hair Spa Relaxation (60 min)</span>
+        </div>
+        <div class="pkg-price"><span style="text-decoration:line-through;opacity:0.5;font-size:0.7em">$34</span> $28</div>
+        <div class="pkg-tap">Tap for details <span class="arrow">▾</span></div>
+        <div class="pkg-details">
+          <div class="pkg-detail-label">What's included</div>
+          <div class="pkg-detail-text"><strong>Face Massage</strong> — Pressure points &amp; lymphatic drainage for a relaxed, glowing face.</div>
+          <div class="pkg-detail-text"><strong>Hair Spa Relaxation</strong> — Vietnamese-style with ginger oil &amp; herbal mask for deep scalp nourishment.</div>
+          <div class="pkg-detail-label">Perfect for</div>
+          <div class="pkg-detail-text">First-timers, gentle introduction to spa pampering, stress relief.</div>
+        </div>
+      </div>
+
+      <div class="package-card best" onclick="this.classList.toggle('open')">
+        <div class="pkg-name">Full Glow</div>
+        <div class="pkg-duration">~3 hours</div>
+        <div class="pkg-items">
+          <span>BB Glow Derma Pen (60 min)</span>
+          <span>Hair Spa Relaxation (60 min)</span>
+          <span>Manicure &amp; Pedicure (45 min)</span>
+        </div>
+        <div class="pkg-price"><span style="text-decoration:line-through;opacity:0.5;font-size:0.7em">$75</span> $59</div>
+        <div class="pkg-tap">Tap for details <span class="arrow">▾</span></div>
+        <div class="pkg-details">
+          <div class="pkg-detail-label">What's included</div>
+          <div class="pkg-detail-text"><strong>BB Glow Derma Pen</strong> — Semi-permanent foundation for flawless, even skin tone.</div>
+          <div class="pkg-detail-text"><strong>Hair Spa Relaxation</strong> — Vietnamese-style with ginger oil &amp; herbal mask.</div>
+          <div class="pkg-detail-text"><strong>Manicure &amp; Pedicure</strong> — Classic polish for hands &amp; feet, the full pampering combo.</div>
+          <div class="pkg-detail-label">Perfect for</div>
+          <div class="pkg-detail-text">Complete head-to-toe glow-up, special occasions, treat yourself days.</div>
+        </div>
+      </div>
+
+      <div class="package-card" onclick="this.classList.toggle('open')">
+        <div class="pkg-name">Office Rescue</div>
+        <div class="pkg-duration">~2.5 hours</div>
+        <div class="pkg-items">
+          <span>Back Massage (60 min)</span>
+          <span>ASMR Facial (45 min)</span>
+          <span>Hair Wash &amp; Blow-dry (45 min)</span>
+        </div>
+        <div class="pkg-price"><span style="text-decoration:line-through;opacity:0.5;font-size:0.7em">$44</span> $35</div>
+        <div class="pkg-tap">Tap for details <span class="arrow">▾</span></div>
+        <div class="pkg-details">
+          <div class="pkg-detail-label">Back Spa</div>
+          <div class="pkg-detail-text">Deep-tissue back massage targeting office tension, knots and stiffness from desk work.</div>
+          <div class="pkg-detail-label">Head &amp; Shoulder Release</div>
+          <div class="pkg-detail-text">Focused massage on neck, shoulders and scalp to relieve computer-related strain.</div>
+          <div class="pkg-detail-label">Hot Herbal Compress</div>
+          <div class="pkg-detail-text">Traditional Thai herbal compress applied to back and shoulders for deep muscle relief.</div>
+          <div class="pkg-detail-label">Eye Rescue Treatment</div>
+          <div class="pkg-detail-text">Cooling eye mask with gentle pressure-point massage to soothe screen-fatigued eyes.</div>
+        </div>
+      </div>
+        
+
+    </div>
+  </div>
+
+  <!-- LOYALTY -->
+  <div class="loyalty-banner animate-in">
+    <div>
+      <h3>Loyalty Reward</h3>
+      <p>Every 5th visit, get 1 treatment of your choice FREE</p>
+    </div>
+    <div class="loyalty-badge">5th Visit = FREE</div>
+  </div>
+
+  <!-- QR CODE -->
+  <div class="qr-section animate-in">
+    <div class="qr-title"><div style="text-align:center;padding:8px 0;color:#9A9A9A;font-size:13px">Street 2004, Sangkat Kakab, Khan Por Sen Chey, Phnom Penh</div>Scan to View Our Menu</div>
+    <div class="qr-subtitle">Save it on your phone for your next visit</div>
+    <div id="qrcode"></div>
+    <div class="qr-url" id="qr-url-display"></div>
+  </div>
+
+</div>
+
+<!-- ======== FOOTER ======== -->
+<div class="footer">
+  <div class="footer-hours">Tuesday – Sunday · 9:00 AM – 9:00 PM · Closed Monday</div>
+  <div class="footer-info">
+    <a href="tel:+855096857896"><a href="https://wa.me/855096857896" style="color:#B8860B;text-decoration:none">+855 09 68 57 85 96</a></a><br>
+    Phnom Penh, Cambodia
+  </div>
+  <div class="footer-ig">@MOANABEAUTYSPA</div>
+  <div class="footer-brand">MOANA Beauty Spa · សប៉ា សម្រស់</div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+  // Header shadow on scroll
+  const header = document.getElementById('main-header');
+  window.addEventListener('scroll', () => {
+    header.classList.toggle('scrolled', window.scrollY > 10);
+  }, { passive: true });
+
+  // Active nav on scroll
+  const sections = document.querySelectorAll('.section');
+  const navLinks = document.querySelectorAll('.nav-bar a');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        navLinks.forEach(link => link.classList.remove('active'));
+        const id = entry.target.id;
+        const activeLink = document.querySelector(`.nav-bar a[href="#${id}"]`);
+        if (activeLink) activeLink.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-25% 0px -65% 0px' });
+  sections.forEach(s => observer.observe(s));
+
+  // Animations are handled by CSS keyframes — no JS needed
+
+  // QR Code
+  document.addEventListener('DOMContentLoaded', function() {
+    const qrContainer = document.getElementById('qrcode');
+    const urlDisplay = document.getElementById('qr-url-display');
+    const pageUrl = window.location.href;
+    if (qrContainer && typeof QRCode !== 'undefined') {
+      new QRCode(qrContainer, {
+        text: pageUrl,
+        width: 160,
+        height: 160,
+        colorDark: '#B8860B',
+        colorLight: '#ffffff',
+        correctLevel: QRCode.CorrectLevel.H
+      });
+    }
+    if (urlDisplay) urlDisplay.textContent = pageUrl;
+  });
+</script>
+
+<script>document.addEventListener("DOMContentLoaded",function(){document.querySelectorAll(".service-card,.combo-card,.package-card,section").forEach(function(e){e.classList.add("fade-in")});var o=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){e.target.classList.add("visible");o.unobserve(e.target)}})},{threshold:.1});document.querySelectorAll(".fade-in").forEach(function(e){o.observe(e)})});</script><div style="text-align:center;padding:16px 0 32px"><button onclick="if(navigator.share){navigator.share({title:'MOANA Beauty Spa',url:location.href})}else{navigator.clipboard.writeText(location.href).then(function(){alert('Lien copie!')})}" style="background:none;border:1px solid #B8860B;color:#B8860B;padding:8px 20px;border-radius:20px;font-size:13px;cursor:pointer;font-family:inherit">Share this menu</button></div><script>if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js')}</script></body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+      <meta name="theme-color" content="#B8860B">
+      <meta name="apple-mobile-web-app-capable" content="yes">
+      <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+      <meta name="apple-mobile-web-app-title" content="MOANA Menu">
+      <link rel="manifest" href="manifest.json">
+      <link rel="apple-touch-icon" href="icons/icon-192.svg">
+<title>MOANA Beauty Spa — Menu</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #B8860B;
+    --gold-dark: #96700A;
+    --gold-light: #D4A930;
+    --gold-pale: #F5EDD6;
+    --gold-glow: rgba(184,134,11,0.12);
+    --white: #FFFFFF;
+    --bg: #FEFCF7;
+    --text: #2C2C2C;
+    --text-light: #6B6B6B;
+    --text-muted: #9A9A9A;
+    --border: rgba(184,134,11,0.2);
+    --radius: 16px;
+    --radius-sm: 10px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; overflow-x: hidden; }
+
+  body {
+    font-family: 'Montserrat', -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    overflow-x: hidden;
+    min-height: 100vh;
+    min-height: 100dvh;
+  }
+
   /* ===========================
      ANIMATIONS
      =========================== */
