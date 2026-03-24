@@ -519,6 +519,57 @@
   }
 
   /* ===========================
+     HANDS & FEET — Combo Deals
+     =========================== */
+  .hands-combo-label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin: 28px 0 16px;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--gold-dark);
+    letter-spacing: 0.5px;
+  }
+  .hands-combo-label::before,
+  .hands-combo-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--gold-light), transparent);
+    opacity: 0.4;
+  }
+  .combo-icon { font-size: 16px; }
+  .combo-card {
+    background: linear-gradient(135deg, #FFFEF9 0%, #FFF8E1 100%) !important;
+    border: 1.5px solid var(--gold-light) !important;
+    position: relative;
+  }
+  .combo-card::after {
+    content: 'SAVE';
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: linear-gradient(135deg, var(--gold), var(--gold-light));
+    color: white;
+    font-size: 8px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    padding: 2px 8px;
+    border-radius: 4px;
+  }
+  .hands-combos-grid {
+    grid-template-columns: 1fr 1fr !important;
+  }
+  @media (max-width: 600px) {
+    .hands-combos-grid {
+      grid-template-columns: 1fr !important;
+    }
+  }
+
+  /* ===========================
      WAXING GRID
      =========================== */
   .waxing-grid {
@@ -1263,6 +1314,8 @@
       <div class="section-icon">💅</div>
       <h2>Hands &amp; Feet</h2>
     </div>
+
+    <!-- Individual services -->
     <div class="services-grid">
 
       <div class="service-card" onclick="this.classList.toggle('open')">
@@ -1294,7 +1347,9 @@
           </div>
           <div class="best-for">Best for: hand care, polished look, quick pampering</div>
         </div>
-      </div></div><div class="service-card" onclick="this.classList.toggle('open')">
+      </div>
+
+      <div class="service-card" onclick="this.classList.toggle('open')">
         <div class="card-summary">
           <div>
             <div class="name">Pedicure</div>
@@ -1324,7 +1379,9 @@
           </div>
           <div class="best-for">Best for: foot care, relaxation, sandal-ready feet</div>
         </div>
-      </div></div><div class="service-card" onclick="this.classList.toggle('open')">
+      </div>
+
+      <div class="service-card" onclick="this.classList.toggle('open')">
         <div class="card-summary">
           <div>
             <div class="name">Gel Nail Polish</div>
@@ -1354,7 +1411,22 @@
           </div>
           <div class="best-for">Best for: chip-free nails, busy lifestyle, special events</div>
         </div>
-      </div></div><div class="service-card" onclick="this.classList.toggle('open')"><div class="card-summary"><div><div class="name">Manicure + Pedicure Combo</div>
+      </div>
+
+    </div>
+
+    <!-- Combo separator -->
+    <div class="hands-combo-label">
+      <span class="combo-icon">✨</span> Combo Deals — Save more
+    </div>
+
+    <!-- Combo deals -->
+    <div class="services-grid hands-combos-grid">
+
+      <div class="service-card combo-card" onclick="this.classList.toggle('open')">
+        <div class="card-summary">
+          <div>
+            <div class="name">Manicure + Pedicure Combo</div>
             <div class="short-desc">Classic polish - hands &amp; feet</div>
           </div>
           <div class="card-right">
@@ -1377,7 +1449,8 @@
           </div>
         </div>
       </div>
-      <div class="service-card" onclick="this.classList.toggle('open')">
+
+      <div class="service-card combo-card" onclick="this.classList.toggle('open')">
         <div class="card-summary">
           <div>
             <div class="name">Mani + Pedi Combo Gel</div>
