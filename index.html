@@ -1717,7 +1717,7 @@
         correctLevel: QRCode.CorrectLevel.H
       });
     }
-    if (urlDisplay) urlDisplay.textContent = pageUrl;
+    if (urlDisplay) urlDisplay.textContent = pageUrl.split('?')[0];
   });
 </script>
 
