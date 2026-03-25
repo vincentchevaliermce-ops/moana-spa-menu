@@ -466,29 +466,29 @@
 
   /* Vibrant flower-yellow glow — expanded card */
   @keyframes cardGlow {
-    0%, 100% { box-shadow: 0 8px 32px rgba(241,246,68,0.3), 0 0 0 0 rgba(255,215,0,0); }
-    50% { box-shadow: 0 8px 32px rgba(241,246,68,0.3), 0 0 20px 4px rgba(255,215,0,0.15); }
+    0%, 100% { box-shadow: 0 8px 32px rgba(255,215,0,0.25), 0 0 0 0 rgba(255,235,59,0); }
+    50% { box-shadow: 0 8px 32px rgba(255,215,0,0.25), 0 0 24px 6px rgba(255,235,59,0.18); }
   }
   .service-card.open {
-    background: linear-gradient(145deg, #FFD54F 0%, #FFEB3B 40%, #FFF176 70%, #FFEB3B 100%);
-    border: 2.5px solid #FFC107;
+    background: linear-gradient(145deg, #FFF9C4 0%, #FFF176 35%, #FFEE58 65%, #FFF176 100%);
+    border: 2.5px solid #FFD54F;
     border-radius: 20px;
-    box-shadow: 0 8px 32px rgba(241,246,68,0.3), 0 0 20px 4px rgba(255,215,0,0.15);
+    box-shadow: 0 8px 32px rgba(255,215,0,0.25), 0 0 24px 6px rgba(255,235,59,0.18);
     transform: scale(1.02) translateY(-3px);
     animation: cardGlow 3s ease-in-out infinite;
   }
   .service-card.open::before { opacity: 0; }
-  .service-card.open .name { color: #1A1A1A; font-weight: 700; }
-  .service-card.open .short-desc { color: #333; }
-  .service-card.open .price { color: #1A1A1A; font-weight: 800; }
-  .service-card.open .duration { color: #444; }
-  .service-card.open .expand-hint { color: #555; }
-  .service-card.open .detail-panel { border-top-color: rgba(0,0,0,0.1); }
-  .service-card.open .detail-label { color: #6B4C00; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; }
-  .service-card.open .detail-text { color: #1A1A1A; }
-  .service-card.open .detail-steps { color: #1A1A1A; }
-  .service-card.open .step-arrow { color: #997A00; }
-  .service-card.open .best-for { color: #333; font-style: italic; }
+  .service-card.open .name { color: #000000; font-weight: 800; font-size: 20px; }
+  .service-card.open .short-desc { color: #000000; font-weight: 500; }
+  .service-card.open .price { color: #000000; font-weight: 800; font-size: 32px; }
+  .service-card.open .duration { color: #222; font-weight: 600; }
+  .service-card.open .expand-hint { color: #333; font-weight: 600; }
+  .service-card.open .detail-panel { border-top-color: rgba(0,0,0,0.15); }
+  .service-card.open .detail-label { color: #000000; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; }
+  .service-card.open .detail-text { color: #000000; font-weight: 500; }
+  .service-card.open .detail-steps { color: #000000; font-weight: 500; }
+  .service-card.open .step-arrow { color: #555; }
+  .service-card.open .best-for { color: #000000; font-weight: 600; font-style: italic; }
 
   
   
