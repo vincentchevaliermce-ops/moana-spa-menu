@@ -30,7 +30,7 @@
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-  html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; overflow-x: hidden; }
+  html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; overflow-x: hidden; overscroll-behavior: none; }
 
   body {
     font-family: 'Montserrat', -apple-system, sans-serif;
@@ -198,10 +198,11 @@
     justify-content: space-between;
     border-bottom: 1.5px solid var(--border);
     backdrop-filter: blur(10px);
-    transition: box-shadow 0.3s ease;
+    transition: box-shadow 0.4s ease, background-color 0.4s ease;
   }
   .header.scrolled {
-    box-shadow: 0 2px 20px rgba(184,134,11,0.08);
+    box-shadow: 0 2px 20px rgba(184,134,11,0.12);
+    background: rgba(255,255,255,0.97);
   }
 
   .header-brand {
@@ -444,9 +445,10 @@
     border-radius: var(--radius);
     padding: 20px;
     cursor: pointer;
-    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     position: relative;
     overflow: hidden;
+    will-change: transform, box-shadow;
   }
   .service-card::before {
     content: '';
@@ -459,8 +461,12 @@
   }
   .service-card:hover {
     border-color: var(--gold-light);
-    box-shadow: 0 4px 20px var(--gold-glow);
-    transform: translateY(-2px);
+    box-shadow: 0 6px 24px var(--gold-glow);
+    transform: translateY(-2px) scale(1.01);
+  }
+  .service-card:active {
+    transform: scale(0.985);
+    transition-duration: 0.1s;
   }
   .service-card:hover::before { opacity: 1; }
 
@@ -476,6 +482,7 @@
     box-shadow: 0 8px 32px rgba(255,215,0,0.25), 0 0 24px 6px rgba(255,235,59,0.18);
     transform: scale(1.02) translateY(-3px);
     animation: cardGlow 3s ease-in-out infinite;
+    transition: all 0.4s ease-out;
   }
   .service-card.open::before { opacity: 0; }
   .service-card.open .name { color: #000000; font-weight: 800; font-size: 20px; }
@@ -679,7 +686,11 @@
   .wax-item:hover {
     border-color: var(--gold-light);
     box-shadow: 0 2px 12px var(--gold-glow);
-    transform: translateY(-1px);
+    transform: translateY(-1px) scale(1.01);
+  }
+  .wax-item:active {
+    transform: scale(0.98);
+    transition-duration: 0.1s;
   }
   .wax-item .wax-name {
     font-size: 12px;
@@ -713,7 +724,11 @@
   .package-card:hover {
     border-color: var(--gold);
     box-shadow: 0 8px 30px var(--gold-glow);
-    transform: translateY(-4px);
+    transform: translateY(-4px) scale(1.01);
+  }
+  .package-card:active {
+    transform: scale(0.985);
+    transition-duration: 0.1s;
   }
   .package-card.best {
     border-color: var(--gold);
@@ -1011,7 +1026,7 @@
 
   ::-webkit-scrollbar { width: 0; height: 0; }
   body { scrollbar-width: none; }
-.fade-in{opacity:0;transform:translateY(16px);transition:opacity .5s ease,transform .5s ease}.fade-in.visible{opacity:1;transform:translateY(0)}
+
 
     /* Responsive: tablet packages 2-col */
     @media (min-width: 650px) and (max-width: 850px) {
@@ -1028,6 +1043,109 @@
       .services-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
       .packages-grid { grid-template-columns: repeat(3, 1fr); }
     }
+
+
+  @keyframes pulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(184,134,11,0.3); }
+    50% { box-shadow: 0 0 0 8px rgba(184,134,11,0); }
+  }
+  @keyframes loyaltyShimmer {
+    0% { background-position: -200% center; }
+    100% { background-position: 200% center; }
+  }
+  @keyframes strikeReveal {
+    from { width: 0; }
+    to { width: 100%; }
+  }
+  @keyframes rippleEffect {
+    to { transform: scale(4); opacity: 0; }
+  }
+
+  /* Scroll reveal */
+  .scroll-reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+  .scroll-reveal.revealed {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Touch ripple */
+  .ripple-container { position: relative; overflow: hidden; }
+  .ripple {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(184,134,11,0.15);
+    transform: scale(0);
+    animation: rippleEffect 0.6s ease-out;
+    pointer-events: none;
+  }
+
+  /* Share button pulse */
+  .share-btn-animated {
+    animation: pulse 2.5s ease-in-out infinite;
+    transition: all 0.3s ease;
+  }
+  .share-btn-animated:hover {
+    background: var(--gold) !important;
+    color: white !important;
+    border-color: var(--gold) !important;
+    transform: scale(1.05);
+  }
+  .share-btn-animated:active {
+    transform: scale(0.95);
+  }
+
+  /* Loyalty badge shimmer */
+  .loyalty-badge-animated {
+    background: linear-gradient(90deg, var(--white) 0%, var(--white) 40%, #FFF8E1 50%, var(--white) 60%, var(--white) 100%) !important;
+    background-size: 200% 100% !important;
+    animation: loyaltyShimmer 3s ease-in-out infinite !important;
+  }
+
+  /* Package strikethrough animated */
+  .strike-animated {
+    position: relative;
+    text-decoration: none !important;
+  }
+  .strike-animated::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 0;
+    height: 2px;
+    background: rgba(255,255,255,0.6);
+    transition: width 0.6s ease-out;
+  }
+  .strike-animated.visible::after {
+    width: 100%;
+  }
+
+  /* Nav active smooth transition */
+  .nav-bar a {
+    transition: color 0.3s ease, border-bottom-color 0.3s ease, background-color 0.3s ease;
+  }
+  .nav-bar a.active {
+    background-color: rgba(184,134,11,0.04);
+  }
+
+  /* Will-change hints */
+  .package-card, .wax-item { will-change: transform; }
+  .detail-panel, .pkg-details { will-change: max-height, opacity; }
+
+  /* Reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+    .scroll-reveal { opacity: 1; transform: none; }
+    html { scroll-behavior: auto; }
+  }
 
   </style>
 </head>
@@ -1877,30 +1995,123 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script>
-  // Header shadow on scroll
+(function() {
+  'use strict';
+  
+  // === Header shadow on scroll ===
   const header = document.getElementById('main-header');
+  let lastScroll = 0;
   window.addEventListener('scroll', () => {
-    header.classList.toggle('scrolled', window.scrollY > 10);
+    const y = window.scrollY;
+    header.classList.toggle('scrolled', y > 10);
+    lastScroll = y;
   }, { passive: true });
 
-  // Active nav on scroll
-  const sections = document.querySelectorAll('.section');
+  // === Smooth scroll with offset for nav links ===
+  const navBar = document.querySelector('.nav-bar');
   const navLinks = document.querySelectorAll('.nav-bar a');
-  const observer = new IntersectionObserver((entries) => {
+  navLinks.forEach(link => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      const targetId = link.getAttribute('href').slice(1);
+      const target = document.getElementById(targetId);
+      if (!target) return;
+      const headerH = header.offsetHeight;
+      const navH = navBar.offsetHeight;
+      const offset = headerH + navH + 12;
+      const top = target.getBoundingClientRect().top + window.scrollY - offset;
+      window.scrollTo({ top, behavior: 'smooth' });
+    });
+  });
+
+  // === Active nav on scroll ===
+  const sections = document.querySelectorAll('.section[id]');
+  const navObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
-        navLinks.forEach(link => link.classList.remove('active'));
+        navLinks.forEach(l => l.classList.remove('active'));
         const id = entry.target.id;
-        const activeLink = document.querySelector(`.nav-bar a[href="#${id}"]`);
-        if (activeLink) activeLink.classList.add('active');
+        const active = document.querySelector('.nav-bar a[href="#' + id + '"]');
+        if (active) {
+          active.classList.add('active');
+          // Auto-scroll nav to keep active link visible
+          active.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+        }
       }
     });
-  }, { rootMargin: '-25% 0px -65% 0px' });
-  sections.forEach(s => observer.observe(s));
+  }, { rootMargin: '-20% 0px -60% 0px' });
+  sections.forEach(s => navObserver.observe(s));
 
-  // Animations are handled by CSS keyframes — no JS needed
+  // === Scroll reveal with stagger ===
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        // Stagger children cards
+        const cards = entry.target.querySelectorAll('.service-card, .combo-card, .package-card, .wax-item');
+        cards.forEach((card, i) => {
+          card.style.transitionDelay = (i * 0.08) + 's';
+          card.classList.add('scroll-reveal', 'revealed');
+        });
+        // Reveal the section itself
+        entry.target.classList.add('revealed');
+        revealObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.08, rootMargin: '0px 0px -60px 0px' });
 
-  // QR Code
+  // Apply scroll-reveal to sections and special elements
+  document.querySelectorAll('.section, .hero-banner, .loyalty-banner, .qr-section').forEach(el => {
+    el.classList.add('scroll-reveal');
+    revealObserver.observe(el);
+  });
+  // Apply to individual cards too for initial state
+  document.querySelectorAll('.service-card, .combo-card, .package-card, .wax-item').forEach(el => {
+    el.classList.add('scroll-reveal');
+  });
+
+  // === Touch ripple effect ===
+  function createRipple(e) {
+    const el = e.currentTarget;
+    const ripple = document.createElement('span');
+    ripple.classList.add('ripple');
+    const rect = el.getBoundingClientRect();
+    const size = Math.max(rect.width, rect.height);
+    ripple.style.width = ripple.style.height = size + 'px';
+    const x = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left - size / 2;
+    const y = (e.touches ? e.touches[0].clientY : e.clientY) - rect.top - size / 2;
+    ripple.style.left = x + 'px';
+    ripple.style.top = y + 'px';
+    el.appendChild(ripple);
+    ripple.addEventListener('animationend', () => ripple.remove());
+  }
+  document.querySelectorAll('.service-card, .combo-card, .package-card, .wax-item').forEach(el => {
+    el.classList.add('ripple-container');
+    el.addEventListener('touchstart', createRipple, { passive: true });
+  });
+
+  // === Share button pulse class ===
+  const shareBtn = document.querySelector('button[onclick*="navigator.share"]');
+  if (shareBtn) shareBtn.classList.add('share-btn-animated');
+
+  // === Loyalty badge shimmer ===
+  const loyaltyBadge = document.querySelector('.loyalty-badge');
+  if (loyaltyBadge) loyaltyBadge.classList.add('loyalty-badge-animated');
+
+  // === Animated strikethrough on package prices ===
+  const priceObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.querySelectorAll('.pkg-price span[style*="line-through"]').forEach(s => {
+          s.classList.add('strike-animated');
+          requestAnimationFrame(() => s.classList.add('visible'));
+        });
+        priceObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.3 });
+  document.querySelectorAll('.package-card').forEach(el => priceObserver.observe(el));
+
+  // === QR Code ===
   document.addEventListener('DOMContentLoaded', function() {
     const qrContainer = document.getElementById('qrcode');
     const urlDisplay = document.getElementById('qr-url-display');
@@ -1917,8 +2128,7 @@
     }
     if (urlDisplay) urlDisplay.textContent = pageUrl.split('?')[0];
   });
-</script>
-
-<script>document.addEventListener("DOMContentLoaded",function(){document.querySelectorAll(".service-card,.combo-card,.package-card,section").forEach(function(e){e.classList.add("fade-in")});var o=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){e.target.classList.add("visible");o.unobserve(e.target)}})},{threshold:.1});document.querySelectorAll(".fade-in").forEach(function(e){o.observe(e)})});</script><div style="text-align:center;padding:16px 0 32px"><button onclick="if(navigator.share){navigator.share({title:'MOANA Beauty Spa',url:location.href})}else{navigator.clipboard.writeText(location.href).then(function(){alert('Lien copie!')})}" style="background:none;border:1px solid #B8860B;color:#B8860B;padding:8px 20px;border-radius:20px;font-size:13px;cursor:pointer;font-family:inherit">Share this menu</button></div><script>if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js')}</script></body>
+})();
+</script><div style="text-align:center;padding:16px 0 32px"><button onclick="if(navigator.share){navigator.share({title:'MOANA Beauty Spa',url:location.href})}else{navigator.clipboard.writeText(location.href).then(function(){alert('Lien copie!')})}" style="background:none;border:1px solid #B8860B;color:#B8860B;padding:8px 20px;border-radius:20px;font-size:13px;cursor:pointer;font-family:inherit">Share this menu</button></div><script>if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js')}</script></body>
 </html>
 
