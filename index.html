@@ -30,10 +30,10 @@
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-  html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; overflow-x: hidden;  }
+  html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; overflow-x: hidden; overflow-y: auto;  }
 
   body {
-    overflow-y: auto !important;
+    
     font-family: 'Montserrat', -apple-system, sans-serif;
     background: var(--bg);
     color: var(--text);
@@ -1028,7 +1028,6 @@
   ::-webkit-scrollbar { width: 0; height: 0; }
   body { scrollbar-width: none; }
 
-
     /* Responsive: tablet packages 2-col */
     @media (min-width: 650px) and (max-width: 850px) {
       .packages-grid { grid-template-columns: repeat(2, 1fr) !important; }
@@ -1045,7 +1044,6 @@
       .packages-grid { grid-template-columns: repeat(3, 1fr); }
     }
 
-
   @keyframes pulse {
     0%, 100% { box-shadow: 0 0 0 0 rgba(184,134,11,0.3); }
     50% { box-shadow: 0 0 0 8px rgba(184,134,11,0); }
@@ -1058,23 +1056,12 @@
     from { width: 0; }
     to { width: 100%; }
   }
-  @keyframes rippleEffect {
-    to { transform: scale(4); opacity: 0; }
+  
   }
 
-  /* Scroll reveal */
-  .scroll-reveal {
-    opacity: 1;
-    transform: translateY(0);
-    transition: opacity 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  }
-  .scroll-reveal.revealed {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  
 
-  /* Touch ripple */
-  .ripple-container { position: relative; overflow: hidden; }
+  
   .ripple {
     position: absolute;
     border-radius: 50%;
@@ -1144,7 +1131,6 @@
       animation-iteration-count: 1 !important;
       transition-duration: 0.01ms !important;
     }
-    .scroll-reveal { opacity: 1; transform: none; }
     html { scroll-behavior: auto; }
   }
 
@@ -1356,7 +1342,6 @@
       <h2>Body Treatments</h2>
     </div>
     <div class="services-grid">
-
 
       <div class="service-card" onclick="this.classList.toggle('open')">
         <div class="card-summary">
@@ -2051,61 +2036,9 @@
         const cards = entry.target.querySelectorAll('.service-card, .combo-card, .package-card, .wax-item');
         cards.forEach((card, i) => {
           card.style.transitionDelay = (i * 0.08) + 's';
-          card.classList.add('scroll-reveal', 'revealed');
+          
         });
-        // Reveal the section itself
-        entry.target.classList.add('revealed');
-        revealObserver.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.08, rootMargin: '0px 0px -60px 0px' });
-
-  // Apply scroll-reveal to sections and special elements
-  document.querySelectorAll('.section, .hero-banner, .loyalty-banner, .qr-section').forEach(el => {
-    el.classList.add('scroll-reveal');
-    revealObserver.observe(el);
-  });
-  // Apply to individual cards too for initial state
-  document.querySelectorAll('.service-card, .combo-card, .package-card, .wax-item').forEach(el => {
-    el.classList.add('scroll-reveal');
-  });
-
-  // === Touch ripple effect ===
-  function createRipple(e) {
-    const el = e.currentTarget;
-    const ripple = document.createElement('span');
-    ripple.classList.add('ripple');
-    const rect = el.getBoundingClientRect();
-    const size = Math.max(rect.width, rect.height);
-    ripple.style.width = ripple.style.height = size + 'px';
-    const x = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left - size / 2;
-    const y = (e.touches ? e.touches[0].clientY : e.clientY) - rect.top - size / 2;
-    ripple.style.left = x + 'px';
-    ripple.style.top = y + 'px';
-    el.appendChild(ripple);
-    ripple.addEventListener('animationend', () => ripple.remove());
-  }
-  document.querySelectorAll('.service-card, .combo-card, .package-card, .wax-item').forEach(el => {
-    el.classList.add('ripple-container');
-    el.addEventListener('touchstart', createRipple, { passive: true });
-  });
-
-  // === Share button pulse class ===
-  const shareBtn = document.querySelector('button[onclick*="navigator.share"]');
-  if (shareBtn) shareBtn.classList.add('share-btn-animated');
-
-  // === Loyalty badge shimmer ===
-  const loyaltyBadge = document.querySelector('.loyalty-badge');
-  if (loyaltyBadge) loyaltyBadge.classList.add('loyalty-badge-animated');
-
-  // === Animated strikethrough on package prices ===
-  const priceObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.querySelectorAll('.pkg-price span[style*="line-through"]').forEach(s => {
-          s.classList.add('strike-animated');
-          requestAnimationFrame(() => s.classList.add('visible'));
-        });
+        
         priceObserver.unobserve(entry.target);
       }
     });
