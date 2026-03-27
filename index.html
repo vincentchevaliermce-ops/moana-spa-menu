@@ -30,7 +30,7 @@
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-  html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; overflow-x: hidden;  }
+  html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; overflow-x: hidden; -webkit-overflow-scrolling: touch; }
 
   body {
     
@@ -38,11 +38,10 @@
     background: var(--bg);
     color: var(--text);
     line-height: 1.6;
-    min-height: 100vh;
+    min-
     min-height: 100dvh;
   }
 
-  
     /* Package card expand/collapse */
     .package-card {
       cursor: pointer;
@@ -319,7 +318,7 @@
     padding: 4px 14px;
     border-radius: 20px;
     margin-bottom: 10px;
-    backdrop-filter: blur(4px);
+    
   }
   .hero-banner h2 {
     font-family: 'Cormorant Garamond', serif;
@@ -448,7 +447,7 @@
     transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     position: relative;
     overflow: hidden;
-    will-change: transform, box-shadow;
+    
   }
   .service-card::before {
     content: '';
@@ -496,9 +495,6 @@
   .service-card.open .detail-steps { color: #000000; font-weight: 500; }
   .service-card.open .step-arrow { color: #555; }
   .service-card.open .best-for { color: #000000; font-weight: 600; font-style: italic; }
-
-  
-  
 
   .card-summary {
     display: flex;
@@ -1027,14 +1023,6 @@
   ::-webkit-scrollbar { width: 0; height: 0; }
   body { scrollbar-width: none; }
 
-    /* Responsive: tablet packages 2-col */
-    @media (min-width: 650px) and (max-width: 850px) {
-      .packages-grid { grid-template-columns: repeat(2, 1fr) !important; }
-    }
-    /* Responsive: phone landscape compact */
-    @media (orientation: landscape) and (max-height: 500px) {
-      .header { padding: 12px 16px; }
-      .logo { font-size: 22px; }
       .tagline { font-size: 11px; }
       .nav-bar { padding: 6px 0; }
       .nav-bar a { font-size: 11px; padding: 4px 8px; }
@@ -1058,9 +1046,6 @@
   
   }
 
-  
-
-  
   .ripple {
     position: absolute;
     border-radius: 50%;
@@ -1120,8 +1105,6 @@
   }
 
   /* Will-change hints */
-  .package-card, .wax-item { will-change: transform; }
-  .detail-panel, .pkg-details { will-change: max-height, opacity; }
 
   /* Reduced motion */
   @media (prefers-reduced-motion: reduce) {
@@ -1943,7 +1926,6 @@
               <div class="pkg-detail-text">Desk workers, remote workers, chronic tension, screen fatigue, stress relief.</div>
         </div>
       </div>
-        
 
     </div>
   </div>
