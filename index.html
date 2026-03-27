@@ -1012,7 +1012,24 @@
   ::-webkit-scrollbar { width: 0; height: 0; }
   body { scrollbar-width: none; }
 .fade-in{opacity:0;transform:translateY(16px);transition:opacity .5s ease,transform .5s ease}.fade-in.visible{opacity:1;transform:translateY(0)}
-</style>
+
+    /* Responsive: tablet packages 2-col */
+    @media (min-width: 650px) and (max-width: 850px) {
+      .packages-grid { grid-template-columns: repeat(2, 1fr) !important; }
+    }
+    /* Responsive: phone landscape compact */
+    @media (orientation: landscape) and (max-height: 500px) {
+      .header { padding: 12px 16px; }
+      .logo { font-size: 22px; }
+      .tagline { font-size: 11px; }
+      .nav-bar { padding: 6px 0; }
+      .nav-bar a { font-size: 11px; padding: 4px 8px; }
+      .section { padding: 16px 12px; }
+      .services-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+      .packages-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+
+  </style>
 </head>
 <body>
 
@@ -1221,6 +1238,38 @@
     </div>
     <div class="services-grid">
 
+
+      <div class="service-card" onclick="this.classList.toggle('open')">
+        <div class="card-summary">
+          <div>
+            <div class="name">Foot Massage</div>
+            <div class="short-desc">Reflexology &amp; pressure point foot therapy</div>
+          </div>
+          <div class="card-right">
+            <div class="price">$19</div>
+            <div class="duration">60 min</div>
+          </div>
+        </div>
+        <div class="expand-hint">Tap for details <span class="arrow">▾</span></div>
+        <div class="detail-panel">
+          <div class="detail-section">
+            <div class="detail-label">Description</div>
+            <div class="detail-text">Soothing foot reflexology targeting pressure points to release tension throughout the body.</div>
+          </div>
+          <div class="detail-section">
+            <div class="detail-label">Includes</div>
+            <div class="detail-steps">
+              <span>Warm foot soak</span><span class="step-arrow">&rarr;</span>
+              <span>Reflexology pressure points</span><span class="step-arrow">&rarr;</span>
+              <span>Sole &amp; arch deep work</span><span class="step-arrow">&rarr;</span>
+              <span>Calf &amp; ankle massage</span><span class="step-arrow">&rarr;</span>
+              <span>Hot towel finish</span>
+            </div>
+          </div>
+          <div class="best-for">Best for: tired legs, jet lag, circulation, headaches, relaxation</div>
+        </div>
+      </div>
+
       <div class="service-card" onclick="this.classList.toggle('open')">
         <div class="card-summary">
           <div>
@@ -1327,7 +1376,7 @@
             <div class="short-desc">Traditional stretching &amp; pressure point therapy</div>
           </div>
           <div class="card-right">
-            <div class="price">$20</div>
+            <div class="price">$19</div>
             <div class="duration">60 min</div>
           </div>
         </div>
@@ -1358,7 +1407,7 @@
             <div class="short-desc">Relaxing full body massage with warm aromatic oils</div>
           </div>
           <div class="card-right">
-            <div class="price">$20</div>
+            <div class="price">$19</div>
             <div class="duration">60 min</div>
           </div>
         </div>
@@ -1379,6 +1428,68 @@
             </div>
           </div>
           <div class="best-for">Best for: relaxation, stress relief, dry skin, insomnia, general wellness</div>
+        </div>
+      </div>
+
+      <div class="service-card" onclick="this.classList.toggle('open')">
+        <div class="card-summary">
+          <div>
+            <div class="name">Thai Oil Massage</div>
+            <div class="short-desc">Thai technique combined with warm aromatic oils</div>
+          </div>
+          <div class="card-right">
+            <div class="price">$25</div>
+            <div class="duration">60 min</div>
+          </div>
+        </div>
+        <div class="expand-hint">Tap for details <span class="arrow">▾</span></div>
+        <div class="detail-panel">
+          <div class="detail-section">
+            <div class="detail-label">Description</div>
+            <div class="detail-text">The best of both worlds — Thai stretching techniques enhanced with warm aromatic oils for deeper muscle relief.</div>
+          </div>
+          <div class="detail-section">
+            <div class="detail-label">Includes</div>
+            <div class="detail-steps">
+              <span>Warm oil application</span><span class="step-arrow">&rarr;</span>
+              <span>Thai stretching with oil</span><span class="step-arrow">&rarr;</span>
+              <span>Deep pressure point work</span><span class="step-arrow">&rarr;</span>
+              <span>Full body flow</span><span class="step-arrow">&rarr;</span>
+              <span>Relaxation finish</span>
+            </div>
+          </div>
+          <div class="best-for">Best for: deep relaxation, muscle recovery, flexibility, chronic pain</div>
+        </div>
+      </div>
+
+      <div class="service-card" onclick="this.classList.toggle('open')">
+        <div class="card-summary">
+          <div>
+            <div class="name">Hot Stone Oil Massage</div>
+            <div class="short-desc">Heated basalt stones with warm oil for deep relief</div>
+          </div>
+          <div class="card-right">
+            <div class="price">$25</div>
+            <div class="duration">60 min</div>
+          </div>
+        </div>
+        <div class="expand-hint">Tap for details <span class="arrow">▾</span></div>
+        <div class="detail-panel">
+          <div class="detail-section">
+            <div class="detail-label">Description</div>
+            <div class="detail-text">Smooth heated basalt stones placed on key tension points, combined with warm oil massage for ultimate muscle release.</div>
+          </div>
+          <div class="detail-section">
+            <div class="detail-label">Includes</div>
+            <div class="detail-steps">
+              <span>Hot stone placement</span><span class="step-arrow">&rarr;</span>
+              <span>Warm oil full body massage</span><span class="step-arrow">&rarr;</span>
+              <span>Stone gliding on muscles</span><span class="step-arrow">&rarr;</span>
+              <span>Deep heat therapy</span><span class="step-arrow">&rarr;</span>
+              <span>Gentle cool-down finish</span>
+            </div>
+          </div>
+          <div class="best-for">Best for: chronic tension, stress, poor circulation, cold sensitivity, luxury treat</div>
         </div>
       </div>
 
