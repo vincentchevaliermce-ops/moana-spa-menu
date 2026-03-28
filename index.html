@@ -2023,11 +2023,11 @@
           
         });
         
-        priceObserver.unobserve(entry.target);
+        revealObserver.unobserve(entry.target);
       }
     });
   }, { threshold: 0.3 });
-  document.querySelectorAll('.package-card').forEach(el => priceObserver.observe(el));
+  document.querySelectorAll(".package-card").forEach(el => revealObserver.observe(el));
 
     const qrContainer = document.getElementById('qrcode');
     const urlDisplay = document.getElementById('qr-url-display');
