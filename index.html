@@ -30,15 +30,18 @@
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-  html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; overflow-x: hidden; -webkit-overflow-scrolling: touch; }
+  html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; overflow-x: hidden; overflow-y: auto; -webkit-overflow-scrolling: touch; height: auto; }
 
   body {
-    
+    overflow-y: auto;
+    overflow-x: hidden;
+    height: auto;
+    position: relative;
     font-family: 'Montserrat', -apple-system, sans-serif;
     background: var(--bg);
     color: var(--text);
     line-height: 1.6;
-    min-
+
     min-height: 100dvh;
   }
 
@@ -2026,23 +2029,31 @@
   }, { threshold: 0.3 });
   document.querySelectorAll('.package-card').forEach(el => priceObserver.observe(el));
 
-  // === QR Code ===
-  document.addEventListener('DOMContentLoaded', function() {
     const qrContainer = document.getElementById('qrcode');
     const urlDisplay = document.getElementById('qr-url-display');
     const pageUrl = window.location.href;
-    if (qrContainer && typeof QRCode !== 'undefined') {
-      new QRCode(qrContainer, {
-        text: pageUrl,
-        width: 160,
-        height: 160,
-        colorDark: '#B8860B',
-        colorLight: '#ffffff',
-        correctLevel: QRCode.CorrectLevel.H
-      });
+    if (qrContainer) {
+      if (typeof QRCode !== 'undefined') {
+        new QRCode(qrContainer, {
+          text: pageUrl,
+          width: 160,
+          height: 160,
+          colorDark: '#B8860B',
+          colorLight: '#ffffff',
+          correctLevel: QRCode.CorrectLevel.H
+        });
+      } else {
+        // Fallback: API-generated QR image
+        var img = document.createElement('img');
+        img.src = 'https://api.qrserver.com/v1/create-qr-code/?size=160x160&color=B8860B&data=' + encodeURIComponent(pageUrl);
+        img.alt = 'QR Code';
+        img.width = 160;
+        img.height = 160;
+        img.style.display = 'block';
+        qrContainer.appendChild(img);
+      }
     }
     if (urlDisplay) urlDisplay.textContent = pageUrl.split('?')[0];
-  });
 })();
 </script><div style="text-align:center;padding:16px 0 32px"><button onclick="if(navigator.share){navigator.share({title:'MOANA Beauty Spa',url:location.href})}else{navigator.clipboard.writeText(location.href).then(function(){alert('Lien copie!')})}" style="background:none;border:1px solid #B8860B;color:#B8860B;padding:8px 20px;border-radius:20px;font-size:13px;cursor:pointer;font-family:inherit">Share this menu</button></div><script>if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js')}</script></body>
 </html>
