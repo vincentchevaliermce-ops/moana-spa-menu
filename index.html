@@ -30,21 +30,19 @@
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-  html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; overflow-x: hidden; overflow-y: auto; -webkit-overflow-scrolling: touch; height: auto; }
+  html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; overflow-x: hidden; }
 
   body {
-    overflow-y: auto;
-    overflow-x: hidden;
-    height: auto;
-    position: relative;
     font-family: 'Montserrat', -apple-system, sans-serif;
     background: var(--bg);
     color: var(--text);
     line-height: 1.6;
-
+    overflow-x: hidden;
+    min-height: 100vh;
     min-height: 100dvh;
   }
 
+  
     /* Package card expand/collapse */
     .package-card {
       cursor: pointer;
@@ -200,11 +198,10 @@
     justify-content: space-between;
     border-bottom: 1.5px solid var(--border);
     backdrop-filter: blur(10px);
-    transition: box-shadow 0.4s ease, background-color 0.4s ease;
+    transition: box-shadow 0.3s ease;
   }
   .header.scrolled {
-    box-shadow: 0 2px 20px rgba(184,134,11,0.12);
-    background: rgba(255,255,255,0.97);
+    box-shadow: 0 2px 20px rgba(184,134,11,0.08);
   }
 
   .header-brand {
@@ -321,7 +318,7 @@
     padding: 4px 14px;
     border-radius: 20px;
     margin-bottom: 10px;
-    
+    backdrop-filter: blur(4px);
   }
   .hero-banner h2 {
     font-family: 'Cormorant Garamond', serif;
@@ -447,10 +444,9 @@
     border-radius: var(--radius);
     padding: 20px;
     cursor: pointer;
-    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
     overflow: hidden;
-    
   }
   .service-card::before {
     content: '';
@@ -463,12 +459,8 @@
   }
   .service-card:hover {
     border-color: var(--gold-light);
-    box-shadow: 0 6px 24px var(--gold-glow);
-    transform: translateY(-2px) scale(1.01);
-  }
-  .service-card:active {
-    transform: scale(0.985);
-    transition-duration: 0.1s;
+    box-shadow: 0 4px 20px var(--gold-glow);
+    transform: translateY(-2px);
   }
   .service-card:hover::before { opacity: 1; }
 
@@ -484,7 +476,6 @@
     box-shadow: 0 8px 32px rgba(255,215,0,0.25), 0 0 24px 6px rgba(255,235,59,0.18);
     transform: scale(1.02) translateY(-3px);
     animation: cardGlow 3s ease-in-out infinite;
-    transition: all 0.4s ease-out;
   }
   .service-card.open::before { opacity: 0; }
   .service-card.open .name { color: #000000; font-weight: 800; font-size: 20px; }
@@ -498,6 +489,9 @@
   .service-card.open .detail-steps { color: #000000; font-weight: 500; }
   .service-card.open .step-arrow { color: #555; }
   .service-card.open .best-for { color: #000000; font-weight: 600; font-style: italic; }
+
+  
+  
 
   .card-summary {
     display: flex;
@@ -685,11 +679,7 @@
   .wax-item:hover {
     border-color: var(--gold-light);
     box-shadow: 0 2px 12px var(--gold-glow);
-    transform: translateY(-1px) scale(1.01);
-  }
-  .wax-item:active {
-    transform: scale(0.98);
-    transition-duration: 0.1s;
+    transform: translateY(-1px);
   }
   .wax-item .wax-name {
     font-size: 12px;
@@ -723,11 +713,7 @@
   .package-card:hover {
     border-color: var(--gold);
     box-shadow: 0 8px 30px var(--gold-glow);
-    transform: translateY(-4px) scale(1.01);
-  }
-  .package-card:active {
-    transform: scale(0.985);
-    transition-duration: 0.1s;
+    transform: translateY(-4px);
   }
   .package-card.best {
     border-color: var(--gold);
@@ -1025,7 +1011,16 @@
 
   ::-webkit-scrollbar { width: 0; height: 0; }
   body { scrollbar-width: none; }
+.fade-in{opacity:0;transform:translateY(16px);transition:opacity .5s ease,transform .5s ease}.fade-in.visible{opacity:1;transform:translateY(0)}
 
+    /* Responsive: tablet packages 2-col */
+    @media (min-width: 650px) and (max-width: 850px) {
+      .packages-grid { grid-template-columns: repeat(2, 1fr) !important; }
+    }
+    /* Responsive: phone landscape compact */
+    @media (orientation: landscape) and (max-height: 500px) {
+      .header { padding: 12px 16px; }
+      .logo { font-size: 22px; }
       .tagline { font-size: 11px; }
       .nav-bar { padding: 6px 0; }
       .nav-bar a { font-size: 11px; padding: 4px 8px; }
@@ -1033,91 +1028,6 @@
       .services-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
       .packages-grid { grid-template-columns: repeat(3, 1fr); }
     }
-
-  @keyframes pulse {
-    0%, 100% { box-shadow: 0 0 0 0 rgba(184,134,11,0.3); }
-    50% { box-shadow: 0 0 0 8px rgba(184,134,11,0); }
-  }
-  @keyframes loyaltyShimmer {
-    0% { background-position: -200% center; }
-    100% { background-position: 200% center; }
-  }
-  @keyframes strikeReveal {
-    from { width: 0; }
-    to { width: 100%; }
-  }
-  
-  }
-
-  .ripple {
-    position: absolute;
-    border-radius: 50%;
-    background: rgba(184,134,11,0.15);
-    transform: scale(0);
-    animation: rippleEffect 0.6s ease-out;
-    pointer-events: none;
-  }
-
-  /* Share button pulse */
-  .share-btn-animated {
-    animation: pulse 2.5s ease-in-out infinite;
-    transition: all 0.3s ease;
-  }
-  .share-btn-animated:hover {
-    background: var(--gold) !important;
-    color: white !important;
-    border-color: var(--gold) !important;
-    transform: scale(1.05);
-  }
-  .share-btn-animated:active {
-    transform: scale(0.95);
-  }
-
-  /* Loyalty badge shimmer */
-  .loyalty-badge-animated {
-    background: linear-gradient(90deg, var(--white) 0%, var(--white) 40%, #FFF8E1 50%, var(--white) 60%, var(--white) 100%) !important;
-    background-size: 200% 100% !important;
-    animation: loyaltyShimmer 3s ease-in-out infinite !important;
-  }
-
-  /* Package strikethrough animated */
-  .strike-animated {
-    position: relative;
-    text-decoration: none !important;
-  }
-  .strike-animated::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 50%;
-    width: 0;
-    height: 2px;
-    background: rgba(255,255,255,0.6);
-    transition: width 0.6s ease-out;
-  }
-  .strike-animated.visible::after {
-    width: 100%;
-  }
-
-  /* Nav active smooth transition */
-  .nav-bar a {
-    transition: color 0.3s ease, border-bottom-color 0.3s ease, background-color 0.3s ease;
-  }
-  .nav-bar a.active {
-    background-color: rgba(184,134,11,0.04);
-  }
-
-  /* Will-change hints */
-
-  /* Reduced motion */
-  @media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after {
-      animation-duration: 0.01ms !important;
-      animation-iteration-count: 1 !important;
-      transition-duration: 0.01ms !important;
-    }
-    html { scroll-behavior: auto; }
-  }
 
   </style>
 </head>
@@ -1327,6 +1237,7 @@
       <h2>Body Treatments</h2>
     </div>
     <div class="services-grid">
+
 
       <div class="service-card" onclick="this.classList.toggle('open')">
         <div class="card-summary">
@@ -1929,6 +1840,7 @@
               <div class="pkg-detail-text">Desk workers, remote workers, chronic tension, screen fatigue, stress relief.</div>
         </div>
       </div>
+        
 
     </div>
   </div>
@@ -1965,96 +1877,48 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script>
-(function() {
-  'use strict';
-  
-  // === Header shadow on scroll ===
+  // Header shadow on scroll
   const header = document.getElementById('main-header');
-  let lastScroll = 0;
   window.addEventListener('scroll', () => {
-    const y = window.scrollY;
-    header.classList.toggle('scrolled', y > 10);
-    lastScroll = y;
+    header.classList.toggle('scrolled', window.scrollY > 10);
   }, { passive: true });
 
-  // === Smooth scroll with offset for nav links ===
-  const navBar = document.querySelector('.nav-bar');
+  // Active nav on scroll
+  const sections = document.querySelectorAll('.section');
   const navLinks = document.querySelectorAll('.nav-bar a');
-  navLinks.forEach(link => {
-    link.addEventListener('click', (e) => {
-      e.preventDefault();
-      const targetId = link.getAttribute('href').slice(1);
-      const target = document.getElementById(targetId);
-      if (!target) return;
-      const headerH = header.offsetHeight;
-      const navH = navBar.offsetHeight;
-      const offset = headerH + navH + 12;
-      const top = target.getBoundingClientRect().top + window.scrollY - offset;
-      window.scrollTo({ top, behavior: 'smooth' });
-    });
-  });
-
-  // === Active nav on scroll ===
-  const sections = document.querySelectorAll('.section[id]');
-  const navObserver = new IntersectionObserver((entries) => {
+  const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
-        navLinks.forEach(l => l.classList.remove('active'));
+        navLinks.forEach(link => link.classList.remove('active'));
         const id = entry.target.id;
-        const active = document.querySelector('.nav-bar a[href="#' + id + '"]');
-        if (active) {
-          active.classList.add('active');
-          // Auto-scroll nav to keep active link visible
-          active.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
-        }
+        const activeLink = document.querySelector(`.nav-bar a[href="#${id}"]`);
+        if (activeLink) activeLink.classList.add('active');
       }
     });
-  }, { rootMargin: '-20% 0px -60% 0px' });
-  sections.forEach(s => navObserver.observe(s));
+  }, { rootMargin: '-25% 0px -65% 0px' });
+  sections.forEach(s => observer.observe(s));
 
-  // === Scroll reveal with stagger ===
-  const revealObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        // Stagger children cards
-        const cards = entry.target.querySelectorAll('.service-card, .combo-card, .package-card, .wax-item');
-        cards.forEach((card, i) => {
-          card.style.transitionDelay = (i * 0.08) + 's';
-          
-        });
-        
-        revealObserver.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.3 });
-  document.querySelectorAll(".package-card").forEach(el => revealObserver.observe(el));
+  // Animations are handled by CSS keyframes — no JS needed
 
+  // QR Code
+  document.addEventListener('DOMContentLoaded', function() {
     const qrContainer = document.getElementById('qrcode');
     const urlDisplay = document.getElementById('qr-url-display');
     const pageUrl = window.location.href;
-    if (qrContainer) {
-      if (typeof QRCode !== 'undefined') {
-        new QRCode(qrContainer, {
-          text: pageUrl,
-          width: 160,
-          height: 160,
-          colorDark: '#B8860B',
-          colorLight: '#ffffff',
-          correctLevel: QRCode.CorrectLevel.H
-        });
-      } else {
-        // Fallback: API-generated QR image
-        var img = document.createElement('img');
-        img.src = 'https://api.qrserver.com/v1/create-qr-code/?size=160x160&color=B8860B&data=' + encodeURIComponent(pageUrl);
-        img.alt = 'QR Code';
-        img.width = 160;
-        img.height = 160;
-        img.style.display = 'block';
-        qrContainer.appendChild(img);
-      }
+    if (qrContainer && typeof QRCode !== 'undefined') {
+      new QRCode(qrContainer, {
+        text: pageUrl,
+        width: 160,
+        height: 160,
+        colorDark: '#B8860B',
+        colorLight: '#ffffff',
+        correctLevel: QRCode.CorrectLevel.H
+      });
     }
     if (urlDisplay) urlDisplay.textContent = pageUrl.split('?')[0];
-})();
-</script><div style="text-align:center;padding:16px 0 32px"><button onclick="if(navigator.share){navigator.share({title:'MOANA Beauty Spa',url:location.href})}else{navigator.clipboard.writeText(location.href).then(function(){alert('Lien copie!')})}" style="background:none;border:1px solid #B8860B;color:#B8860B;padding:8px 20px;border-radius:20px;font-size:13px;cursor:pointer;font-family:inherit">Share this menu</button></div><script>if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js')}</script></body>
+  });
+</script>
+
+<script>document.addEventListener("DOMContentLoaded",function(){document.querySelectorAll(".service-card,.combo-card,.package-card,section").forEach(function(e){e.classList.add("fade-in")});var o=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){e.target.classList.add("visible");o.unobserve(e.target)}})},{threshold:.1});document.querySelectorAll(".fade-in").forEach(function(e){o.observe(e)})});</script><div style="text-align:center;padding:16px 0 32px"><button onclick="if(navigator.share){navigator.share({title:'MOANA Beauty Spa',url:location.href})}else{navigator.clipboard.writeText(location.href).then(function(){alert('Lien copie!')})}" style="background:none;border:1px solid #B8860B;color:#B8860B;padding:8px 20px;border-radius:20px;font-size:13px;cursor:pointer;font-family:inherit">Share this menu</button></div><script>if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js')}</script></body>
 </html>
 
