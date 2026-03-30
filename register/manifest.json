@@ -1,0 +1,50 @@
+{
+  "name": "MOANA Register",
+  "short_name": "MOANA",
+  "description": "MOANA Beauty Spa cash register",
+  "start_url": "index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#1a1a2e",
+  "theme_color": "#B8860B",
+  "prefer_related_applications": false,
+  "icons": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect width='192' height='192' fill='%231a1a2e'/><circle cx='96' cy='96' r='85' fill='%23B8860B'/><text x='96' y='125' font-size='100' font-weight='bold' text-anchor='middle' fill='%23fff8dc' font-family='system-ui'>M</text></svg>",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' fill='%231a1a2e'/><circle cx='256' cy='256' r='225' fill='%23B8860B'/><text x='256' y='340' font-size='280' font-weight='bold' text-anchor='middle' fill='%23fff8dc' font-family='system-ui'>M</text></svg>",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><circle cx='96' cy='96' r='90' fill='%23B8860B'/><text x='96' y='125' font-size='100' font-weight='bold' text-anchor='middle' fill='%23fff8dc' font-family='system-ui'>M</text></svg>",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ],
+  "categories": [
+    "business",
+    "productivity"
+  ],
+  "shortcuts": [
+    {
+      "name": "New Sale",
+      "short_name": "Sale",
+      "description": "Record a new sale",
+      "url": "index.html#caisse"
+    },
+    {
+      "name": "Dashboard",
+      "short_name": "Stats",
+      "description": "View today's stats",
+      "url": "index.html#dashboard"
+    }
+  ]
+}
