@@ -1,4 +1,4 @@
-const CACHE_NAME = 'moana-caisse-v3';
+const CACHE_NAME = 'moana-caisse-v4';
 const ASSETS = [
   './',
   './index.html',

@@ -1018,7 +1018,7 @@ function updateDashboard() {
   document.getElementById('stat-week').textContent = money(weekRev);
   document.getElementById('stat-month').textContent = money(monthRev);
   document.getElementById('stat-month-n').textContent = monthEntries.length + ' client' + (monthEntries.length !== 1 ? 's' : '');
-  document.getElementById('stat-exp').textContent = '-' + money(monthExp);
+  document.getElementById('stat-exp').textContent = (monthExp >= 0 ? '-' : '+') + money(Math.abs(monthExp));
   const balEl = document.getElementById('stat-balance');
   balEl.textContent = (net < 0 ? '-' : '') + money(Math.abs(net));
   balEl.className = 'v ' + (net >= 0 ? 'green' : 'red');
@@ -1166,6 +1166,21 @@ function checkFixedExpenses() {
     setData('expenses', data);
     localStorage.setItem(rentKey, 'true');
   }
+  // Sublease income — a tenant pays $280/month, deducted from rent
+  const subKey = 'moana_sublease_' + monthKey;
+  if (!localStorage.getItem(subKey)) {
+    const data2 = getData('expenses');
+    data2.push({
+      id: Date.now() + 1,
+      cat: 'Rent',
+      amount: -280,
+      desc: 'Sublease income (room rental)',
+      date: new Date(now.getFullYear(), now.getMonth(), 1).toISOString(),
+      fixed: true
+    });
+    setData('expenses', data2);
+    localStorage.setItem(subKey, 'true');
+  }
 }
 checkFixedExpenses();
 
@@ -1174,7 +1189,7 @@ function renderExpenses() {
   const mStart = monthStartOf(now);
   const data = getData('expenses').filter(e => new Date(e.date) >= mStart).sort((a, b) => new Date(b.date) - new Date(a.date));
   const total = data.reduce((s, e) => s + e.amount, 0);
-  document.getElementById('exp-total').textContent = '-' + money(total);
+  document.getElementById('exp-total').textContent = (total >= 0 ? '-' : '+') + money(Math.abs(total));
 
   const container = document.getElementById('expenses-list');
   if (data.length === 0) {
@@ -1186,7 +1201,9 @@ function renderExpenses() {
     '<div><div class="name">' + e.cat + (e.desc ? ' — ' + e.desc : '') + '</div>' +
     '<div class="meta">' + new Date(e.date).toLocaleDateString('en', { month: 'short', day: 'numeric' }) + '</div></div>' +
     '<div style="display:flex;align-items:center;gap:8px;">' +
-    '<span class="amount">-' + money(e.amount) + '</span>' +
+    (e.amount < 0
+      ? '<span class="amount" style="color:var(--green)">+' + money(-e.amount) + '</span>'
+      : '<span class="amount">-' + money(e.amount) + '</span>') +
     '<button class="delete-btn" onclick="deleteExpense(' + e.id + ')">&#x2715;</button></div></div>'
   ).join('');
 }
