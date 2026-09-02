@@ -1,4 +1,12 @@
-const CACHE_NAME = 'moana-caisse-v5';
+const CACHE_NAME = 'moana-caisse-v6';
+
+// Network with timeout: on slow connections, fall back to cache quickly
+function fetchWithTimeout(req, ms) {
+  return Promise.race([
+    fetch(req),
+    new Promise((_, rej) => setTimeout(() => rej(new Error('timeout')), ms))
+  ]);
+}
 const ASSETS = [
   './',
   './index.html',
@@ -34,7 +42,7 @@ self.addEventListener('fetch', e => {
 
   if (isPage) {
     e.respondWith(
-      fetch(e.request).then(resp => {
+      fetchWithTimeout(e.request, 3000).then(resp => {
         const clone = resp.clone();
         caches.open(CACHE_NAME).then(c => c.put(e.request, clone));
         return resp;
