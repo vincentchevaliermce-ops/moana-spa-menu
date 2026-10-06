@@ -667,7 +667,7 @@ function fart(size, style) {
 }
 // ============= REAL FART RECORDINGS (CC0, freesound.org) =============
 const SAMPLES = {
-  'vincent-v2_marrant': '★ Vincent · Marrant', 'vincent-v5_pou_pou_prout': '★ Vincent · Pou-pou-PROUT', 'vincent-v1_naturel': '★ Vincent · Naturel',
+  'vincent-v1_naturel': '★ Vincent · Naturel clean', 'vincent-v2_marrant': '★ Vincent · Marrant', 'vincent-v5_pou_pou_prout': '★ Vincent · Pou-pou-PROUT',
   'vincent-v3_cartoon': '★ Vincent · Cartoon', 'vincent-v4_gros_fier': '★ Vincent · Gros & fier',
   'jix-small-106': 'Mini pouet', 'jix-small-105': 'Petit pet sec', 'teddyferguson': 'Pet rapide',
   'jix-small-110-bullfrog': 'Petite grenouille', 'jix-small-115': 'Petit pet vibrant', 'under7dude-fart6': 'Pet aigu',
@@ -675,7 +675,7 @@ const SAMPLES = {
   'jix-medium-110': 'Pet moyen', 'jix-medium-109': 'Pet moyen qui traîne', 'jix-big-101': 'Gros pet',
   'bipolarbad-squeaky': 'Pet qui couine', 'bassimat-005': 'Pet long', 'frenkfurth-50': 'Pet très long', 'dsis-trumpet': 'Trompette'
 };
-const SND_DEFAULT = { add: 'r:jix-small-106', sale: 'r:vincent-v2_marrant' };
+const SND_DEFAULT = { add: 'r:jix-small-106', sale: 'r:vincent-v1_naturel' };
 const sampleBuf = {};
 function sndChoice(slot) { return localStorage.getItem('moana_snd_' + slot) || SND_DEFAULT[slot]; }
 function loadSample(k) {
