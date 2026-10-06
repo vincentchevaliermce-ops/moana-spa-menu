@@ -258,7 +258,7 @@ nav {
 .btn.gold { background: var(--ink); color: #F3DFA8; }
 .btn.ghost { background: var(--bg); border: 1px solid var(--line); color: var(--text); }
 .opts-light { display: flex; flex-direction: column; gap: 10px; }
-.snd-row { display: grid; grid-template-columns: 120px 1fr 48px; gap: 8px; align-items: center; font-size: 14px; color: var(--text); }
+.snd-row { display: grid; grid-template-columns: 150px 1fr 48px; gap: 8px; align-items: center; font-size: 14px; color: var(--text); }
 .snd-row select { padding: 11px; border-radius: 12px; border: 1px solid var(--line); background: var(--bg); font-size: 15px; color: var(--ink); width: 100%; }
 .snd-row .wide { grid-column: 2 / 4; }
 .opts-light button { padding: 10px 12px; border-radius: 999px; border: 1px solid var(--line); background: var(--bg); font-size: 14px; font-weight: 500; }
@@ -675,7 +675,8 @@ const SAMPLES = {
   'jix-medium-110': 'Pet moyen', 'jix-medium-109': 'Pet moyen qui traîne', 'jix-big-101': 'Gros pet',
   'bipolarbad-squeaky': 'Pet qui couine', 'bassimat-005': 'Pet long', 'frenkfurth-50': 'Pet très long', 'dsis-trumpet': 'Trompette'
 };
-const SND_DEFAULT = { add: 'r:jix-small-106', sale: 'r:vincent-v1_naturel' };
+const SND_DEFAULT = { add: 'r:jix-small-106', sale: 'r:vincent-v1_naturel', asmr: 'r:vincent-v4_gros_fier' };
+const BIG_FART = ['ASMR Hair Wash + Blow Dry', 'Brazilian']; // these services get the big fart
 const sampleBuf = {};
 function sndChoice(slot) { return localStorage.getItem('moana_snd_' + slot) || SND_DEFAULT[slot]; }
 function loadSample(k) {
@@ -697,7 +698,7 @@ function playChoice(v, size) {
   });
 }
 function playSound(slot) { if (soundOn()) playChoice(sndChoice(slot), slot === 'add' ? 0.35 : 0.9); }
-function preloadSounds() { ['add', 'sale'].forEach(s => { const v = sndChoice(s); if (v.startsWith('r:')) loadSample(v.slice(2)); }); }
+function preloadSounds() { ['add', 'sale', 'asmr'].forEach(s => { const v = sndChoice(s); if (v.startsWith('r:')) loadSample(v.slice(2)); }); }
 document.addEventListener('pointerdown', function once() { preloadSounds(); document.removeEventListener('pointerdown', once); });
 function soundSelect(slot) {
   const cur = sndChoice(slot);
@@ -711,6 +712,7 @@ function renderFartOpts() {
   $('fart-opts').innerHTML =
     '<div class="snd-row"><span>Add a service</span>' + soundSelect('add') + '<button onclick="playChoice(sndChoice(\'add\'),0.35)">▶</button></div>' +
     '<div class="snd-row"><span>Sale saved</span>' + soundSelect('sale') + '<button onclick="playChoice(sndChoice(\'sale\'),0.9)">▶</button></div>' +
+    '<div class="snd-row"><span>Big fart: ASMR Hair & Brazilian</span>' + soundSelect('asmr') + '<button onclick="playChoice(sndChoice(\'asmr\'),0.9)">▶</button></div>' +
     '<div class="snd-row"><span>Sound</span><button class="wide" onclick="toggleSound();renderFartOpts()">' + (soundOn() ? '🔊 On · tap to mute' : '🔇 Muted · tap to turn on') + '</button></div>';
 }
 function toggleSound() {
@@ -844,7 +846,7 @@ function saveTicket() {
 function addLine(i) {
   const s = window._tiles[i];
   ticket.push({ name: s.name, cat: s.cat, price: s.price == null ? null : s.price, list: s.price == null ? null : s.price });
-  playSound('add');
+  playSound(BIG_FART.includes(s.name) ? 'asmr' : 'add');
   saveTicket(); renderTicket(); renderTiles();
   const el = $('tiles').children[i]; if (el) el.classList.add('pop');
   const tot = $('t-total'); tot.classList.remove('bump'); void tot.offsetWidth; tot.classList.add('bump');
@@ -958,7 +960,7 @@ function checkout(method) {
     localStorage.setItem(fk, '1');
     setTimeout(() => fireworks(after), 350);
   } else {
-    playSound('sale');
+    playSound(entries.some(e => BIG_FART.includes(e.name)) ? 'asmr' : 'sale');
   }
 }
 function undoLast() {
