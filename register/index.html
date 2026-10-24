@@ -53,7 +53,7 @@ body {
   font-size: 15px;
   padding-bottom: calc(var(--nav-h) + env(safe-area-inset-bottom));
 }
-body.has-ticket { padding-bottom: calc(var(--nav-h) + 150px + env(safe-area-inset-bottom)); }
+body.has-ticket { padding-bottom: calc(var(--nav-h) + 200px + env(safe-area-inset-bottom)); }
 button { font-family: inherit; color: inherit; border: 0; background: none; cursor: pointer; }
 input, select { font-family: inherit; }
 .wrap { max-width: 1100px; margin: 0 auto; padding: 0 16px; }
@@ -175,6 +175,13 @@ header {
 .dock .tools { display: flex; gap: 8px; padding: 0 18px 10px; }
 .dock .tool { font-size: 12.5px; padding: 7px 12px; border-radius: 999px; background: rgba(255,255,255,.09); color: #EDE3CC; }
 .dock .tool.danger { color: #E9A99C; }
+/* client source (how she found us) */
+.srcs { display: flex; align-items: center; gap: 6px; overflow-x: auto; padding: 0 12px 10px; scrollbar-width: none; }
+.srcs::-webkit-scrollbar { display: none; }
+.srcs .lbl { flex: none; font-size: 10.5px; letter-spacing: 1.4px; text-transform: uppercase; color: #A99C80; padding: 0 4px 0 6px; }
+.srcs .s { flex: none; padding: 9px 13px; border-radius: 999px; background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.10); font-size: 13.5px; color: #EDE3CC; white-space: nowrap; }
+.srcs .s.on { background: #F3DFA8; border-color: #F3DFA8; color: var(--ink); font-weight: 600; }
+.srcs.ask .s { border-color: rgba(240,194,122,.55); }
 .pays { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; padding: 0 12px 12px; }
 .pay {
   border-radius: 14px; padding: 13px 4px; font-size: 15px; font-weight: 600; color: #fff;
@@ -288,6 +295,21 @@ nav {
 .tk-l .pr { color: var(--text); white-space: nowrap; }
 .tk-l .pr s { color: var(--muted); font-size: 12px; margin-right: 4px; }
 .del { width: 30px; height: 30px; border-radius: 50%; background: var(--bg); color: var(--muted); font-size: 13px; }
+.srctag { font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 999px; background: var(--brass-pale); color: var(--brass-deep); }
+.srctag.gads { background: #2A2218; color: #F3DFA8; }
+
+/* ===== SOURCES (dashboard) ===== */
+.src-row { display: grid; grid-template-columns: 1fr 70px 80px; gap: 8px; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--line); font-size: 14px; color: var(--ink); }
+.src-row:last-child { border-bottom: 0; }
+.src-row .c { color: var(--muted); font-size: 12.5px; text-align: right; }
+.src-row .a { font-weight: 600; text-align: right; }
+.src-row .n { display: flex; align-items: center; gap: 8px; }
+.src-row .n i { width: 8px; height: 8px; border-radius: 50%; display: inline-block; flex: none; }
+.src-row.muted { color: var(--muted); }
+.roi { margin-top: 12px; border-radius: 14px; padding: 12px 14px; background: var(--bg); border: 1px solid var(--line); font-size: 13.5px; color: var(--text); line-height: 1.5; }
+.roi b { color: var(--ink); }
+.roi .big { font-family: var(--serif); font-size: 26px; font-weight: 700; color: var(--ink); line-height: 1.1; }
+.roi .big.green { color: var(--green); } .roi .big.red { color: var(--red); }
 
 /* ===== EXPENSES ===== */
 .exp-form { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
@@ -368,6 +390,11 @@ nav {
       <div class="section-title">Today by payment</div>
       <div class="split" id="d-split"></div>
     </div>
+    <div class="card">
+      <div class="section-title">Where clients come from (this month)</div>
+      <div id="d-src"></div>
+      <div class="roi" id="d-roi"></div>
+    </div>
     <div class="kpis">
       <div class="kpi"><div class="l">Today</div><div class="v" id="k-today">$0</div><div class="s" id="k-today-n">0 clients</div></div>
       <div class="kpi"><div class="l">Last 7 days</div><div class="v" id="k-week">$0</div><div class="s" id="k-week-n">0 clients</div></div>
@@ -421,7 +448,7 @@ nav {
       <div class="exp-form">
         <select id="e-cat">
           <option>Products</option><option>Salary</option><option>Rent</option><option>Utilities</option>
-          <option>Marketing</option><option>Equipment</option><option>Other</option>
+          <option>Marketing</option><option>Google Ads</option><option>Equipment</option><option>Other</option>
         </select>
         <input type="number" id="e-amt" placeholder="Amount ($)" step="0.01" inputmode="decimal">
         <input type="text" id="e-desc" placeholder="Description (optional)" class="full">
@@ -458,6 +485,7 @@ nav {
       <button class="tool" onclick="toggleDetail()" id="t-edit">Edit · discount</button>
       <button class="tool danger" onclick="clearTicket()">Clear</button>
     </div>
+    <div class="srcs" id="t-src"></div>
     <div class="pays" id="pays">
       <button class="pay pm-cash" onclick="checkout('Cash')">Cash</button>
       <button class="pay pm-aba" onclick="checkout('ABA')">ABA</button>
@@ -547,6 +575,9 @@ const CAT = {
 };
 const PAY_COLORS = { Cash: '#3F7D5A', ABA: '#2F6690', Card: '#8A6A3A', Wing: '#7A4F96' };
 const PAYS = ['Cash', 'ABA', 'Card', 'Wing'];
+// How the client found the spa (asked once per ticket, saved on every line as `src`)
+const SOURCES = ['Regular', 'Google Ads', 'Google Maps', 'Walk-in', 'Friend', 'Social', 'Hotel', 'Other'];
+const SRC_COLORS = { 'Regular': '#A8832F', 'Google Ads': '#2A2218', 'Google Maps': '#3F7D5A', 'Walk-in': '#4A7FB5', 'Friend': '#C94F7C', 'Social': '#7A4F96', 'Hotel': '#D19A2F', 'Other': '#8C7F69' };
 
 // ============= STORAGE (same keys as v1-v6: history stays) =============
 function getData(key) {
@@ -836,10 +867,18 @@ function renderTiles() {
 // ============= TICKET (persisted, survives reloads) =============
 let ticket = loadTicket();
 let disc = loadDisc(); // { type: 'none'|'pct'|'amt', value }
+let src = loadSrc();   // '' until staff taps where the client comes from
 function loadTicket() { try { return JSON.parse(localStorage.getItem('moana_ticket')) || []; } catch (e) { return []; } }
 function loadDisc() { try { return JSON.parse(localStorage.getItem('moana_ticket_disc')) || { type: 'none', value: 0 }; } catch (e) { return { type: 'none', value: 0 }; } }
+function loadSrc() { try { const s = localStorage.getItem('moana_ticket_src') || ''; return SOURCES.includes(s) ? s : ''; } catch (e) { return ''; } }
 function saveTicket() {
-  try { localStorage.setItem('moana_ticket', JSON.stringify(ticket)); localStorage.setItem('moana_ticket_disc', JSON.stringify(disc)); } catch (e) {}
+  try { localStorage.setItem('moana_ticket', JSON.stringify(ticket)); localStorage.setItem('moana_ticket_disc', JSON.stringify(disc)); localStorage.setItem('moana_ticket_src', src); } catch (e) {}
+}
+function setSrc(s) { src = src === s ? '' : s; saveTicket(); renderSrc(); renderTicketSummary(); }
+function renderSrc() {
+  $('t-src').innerHTML = '<span class="lbl">Found us via</span>' + SOURCES.map(s =>
+    '<button class="s' + (s === src ? ' on' : '') + '" onclick="setSrc(\'' + s + '\')">' + esc(s) + '</button>').join('');
+  $('t-src').classList.toggle('ask', !src);
 }
 function addLine(i) {
   const s = window._tiles[i];
@@ -854,7 +893,7 @@ function addCustom() {
   ticket.push({ name: '', cat: 'other', price: null, list: null, custom: true });
   saveTicket(); renderTicket(); renderTiles(); openDetail();
 }
-function removeLine(i) { ticket.splice(i, 1); if (!ticket.length) disc = { type: 'none', value: 0 }; saveTicket(); renderTicket(); renderTiles(); }
+function removeLine(i) { ticket.splice(i, 1); if (!ticket.length) { disc = { type: 'none', value: 0 }; src = ''; } saveTicket(); renderTicket(); renderTiles(); }
 function setLinePrice(i, v) {
   const n = parseFloat(v);
   ticket[i].price = isNaN(n) || n < 0 ? null : r2(n);
@@ -864,7 +903,7 @@ function setLinePrice(i, v) {
 function setLineName(i, v) { ticket[i].name = v; saveTicket(); renderTicketSummary(); }
 function clearTicket() {
   if (ticket.length > 1 && !confirm('Clear this ticket?')) return;
-  ticket = []; disc = { type: 'none', value: 0 }; saveTicket(); closeDetail(); renderTicket(); renderTiles();
+  ticket = []; disc = { type: 'none', value: 0 }; src = ''; saveTicket(); closeDetail(); renderTicket(); renderTiles();
 }
 function setDisc(type, value) {
   if (type === 'amt') {
@@ -893,9 +932,10 @@ function renderTicketSummary() {
   $('t-totals').innerHTML = '<div><span>Subtotal</span><span>' + money(subtotal()) + '</span></div>' +
     (d > 0 ? '<div><span>Discount</span><span>-' + money(d) + '</span></div>' : '') +
     '<div class="g"><span>Total to charge</span><span>' + money(ticketTotal()) + '</span></div>';
-  const ok = ticketReady();
+  const pricesOk = ticketReady(), ok = pricesOk && !!src;
   $('pays').classList.toggle('disabled', !ok);
   $('need').classList.toggle('show', !ok);
+  $('need').textContent = !pricesOk ? 'Enter a price for every service before charging.' : 'Tap how the client found us (above) to charge.';
   document.querySelectorAll('#t-lines .amt').forEach((el, i) => el.classList.toggle('miss', ticket[i] && ticket[i].price == null));
 }
 function renderTicket() {
@@ -915,6 +955,7 @@ function renderTicket() {
   $('t-disc').innerHTML = opts.map(([t, v, label]) =>
     '<button class="o' + ((disc.type === t && (t !== 'pct' || disc.value === v)) ? ' on' : '') + '" onclick="setDisc(\'' + t + '\',' + v + ')">' + label + '</button>'
   ).join('');
+  renderSrc();
   renderTicketSummary();
 }
 function toggleDetail() { $('dock').classList.contains('open') ? closeDetail() : openDetail(); }
@@ -925,6 +966,7 @@ function closeDetail() { $('dock').classList.remove('open'); $('t-edit').textCon
 let lastTicketId = null, toastTimer = null;
 function checkout(method) {
   if (!ticketReady()) { openDetail(); return; }
+  if (!src) { renderTicketSummary(); return; }
   const now = new Date(), tid = Date.now();
   const before = todayTotal();
   const st = subtotal(), d = discountAmt();
@@ -936,7 +978,7 @@ function checkout(method) {
     left = r2(left - share);
     const e = {
       name: (l.name || 'Custom item').trim(), cat: l.cat, price: r2(l.price - share),
-      date: now.toISOString(), payment: method, id: tid * 10 + i, ticket: tid
+      date: now.toISOString(), payment: method, id: tid * 10 + i, ticket: tid, src: src
     };
     if (l.list != null && l.list !== e.price) e.list = l.list;
     if (share > 0) e.disc = share;
@@ -946,7 +988,7 @@ function checkout(method) {
   setData('revenue', data.concat(entries));
   lastTicketId = tid;
   const total = ticketTotal();
-  ticket = []; disc = { type: 'none', value: 0 }; saveTicket();
+  ticket = []; disc = { type: 'none', value: 0 }; src = ''; saveTicket();
   closeDetail(); renderTicket(); renderTiles(); updateHeader();
   $('toast-t').textContent = money(total) + ' · ' + method + ' · saved';
   $('toast').classList.add('show');
@@ -968,6 +1010,7 @@ function undoLast() {
   // put the services back in the ticket so it can be corrected
   ticket = removed.map(e => ({ name: e.name, cat: e.cat, price: e.list != null ? e.list : r2(e.price + (e.disc || 0)), list: e.list != null ? e.list : r2(e.price + (e.disc || 0)), custom: e.cat === 'other' }));
   disc = { type: 'none', value: 0 };
+  src = removed.length && SOURCES.includes(removed[0].src) ? removed[0].src : '';
   saveTicket();
   lastTicketId = null;
   $('toast').classList.remove('show');
@@ -1027,6 +1070,7 @@ function updateDashboard() {
   $('k-net').textContent = money(net);
   $('k-net').className = 'v ' + (net >= 0 ? 'green' : 'red');
   $('k-disc').textContent = money(m.reduce((s, e) => s + (e.disc || 0), 0));
+  renderSources(m, exp.filter(e => new Date(e.date) >= ms));
 
   // 14 days
   const labels = [], vals = [];
@@ -1071,6 +1115,35 @@ function updateDashboard() {
   updateBackupNote();
 }
 
+// ============= SOURCES: where clients come from + Google Ads return =============
+function renderSources(m, mExpenses) {
+  const by = {}; // source -> { tickets:Set, rev }
+  m.forEach(e => {
+    const s = e.src || '—';
+    by[s] = by[s] || { t: new Set(), rev: 0 };
+    by[s].t.add(clientKey(e)); by[s].rev += Number(e.price) || 0;
+  });
+  const rows = SOURCES.filter(s => by[s]).map(s => [s, by[s]]);
+  if (by['—']) rows.push(['Not recorded', by['—']]);
+  $('d-src').innerHTML = rows.length ? rows.map(([s, v]) =>
+    '<div class="src-row' + (s === 'Not recorded' ? ' muted' : '') + '"><span class="n"><i style="background:' + (SRC_COLORS[s] || '#CFC2A6') + '"></i>' + esc(s) + '</span>' +
+    '<span class="c">' + plural(v.t.size, 'client') + '</span><span class="a">' + money(v.rev) + '</span></div>'
+  ).join('') : '<div class="empty">No sales yet this month</div>';
+  // Google Ads: revenue from "Google Ads" clients vs. "Google Ads" expenses of the month
+  const g = by['Google Ads'] || { t: new Set(), rev: 0 };
+  const spend = r2(mExpenses.filter(e => e.cat === 'Google Ads').reduce((s, e) => s + e.amount, 0));
+  const rev = r2(g.rev), n = g.t.size;
+  let html = '<b>Google Ads this month</b><br>' + plural(n, 'client') + ' · ' + money(rev) + ' revenue · ' + money(spend) + ' spent';
+  if (spend > 0) {
+    const ratio = rev / spend;
+    html += '<div class="big ' + (ratio >= 1 ? 'green' : 'red') + '">' + money(ratio) + ' back for every $1</div>' +
+      'Cost per client: <b>' + (n ? money(spend / n) : '—') + '</b>';
+  } else {
+    html += '<br><span style="color:var(--muted)">Add your Google Ads bill in Expenses (category “Google Ads”) to see the return.</span>';
+  }
+  $('d-roi').innerHTML = html;
+}
+
 // ============= HISTORY (by day, then by client ticket) =============
 function renderHistory() {
   const f = $('f-date').value;
@@ -1088,7 +1161,8 @@ function renderHistory() {
       Object.entries(tks).map(([k, lines]) => {
         const p = lines[0].payment || '';
         return '<div class="tk"><div class="tk-h"><div class="m">' + new Date(lines[0].date).toLocaleTimeString('en', { hour: '2-digit', minute: '2-digit' }) +
-          ' <span class="badge pm-' + esc(p.toLowerCase()) + '">' + esc(p) + '</span></div>' +
+          ' <span class="badge pm-' + esc(p.toLowerCase()) + '">' + esc(p) + '</span>' +
+          (lines[0].src ? ' <span class="srctag' + (lines[0].src === 'Google Ads' ? ' gads' : '') + '">' + esc(lines[0].src) + '</span>' : '') + '</div>' +
           '<div style="display:flex;align-items:center;gap:10px"><span class="a">' + money(sum(lines)) + '</span>' +
           '<button class="del" onclick="deleteTicket(\'' + k + '\')">✕</button></div></div>' +
           lines.map(e => '<div class="tk-l"><span class="x"><i style="background:' + (CAT[e.cat] || CAT.other).color + '"></i>' + esc(e.name) + '</span>' +
@@ -1154,8 +1228,8 @@ function csvCell(v) { v = v == null ? '' : String(v); return /[",\n]/.test(v) ? 
 function exportCSV(type) {
   let rows, name;
   if (type === 'revenue') {
-    rows = [['Date', 'Local day', 'Ticket', 'Service', 'Category', 'Menu price', 'Discount', 'Paid', 'Payment']]
-      .concat(getData('revenue').map(e => [e.date, dayKey(e.date), e.ticket || e.id, e.name, e.cat, e.list != null ? e.list : e.price, e.disc || 0, e.price, e.payment]));
+    rows = [['Date', 'Local day', 'Ticket', 'Service', 'Category', 'Menu price', 'Discount', 'Paid', 'Payment', 'Source']]
+      .concat(getData('revenue').map(e => [e.date, dayKey(e.date), e.ticket || e.id, e.name, e.cat, e.list != null ? e.list : e.price, e.disc || 0, e.price, e.payment, e.src || '']));
     name = 'moana_sales_' + dayKey(new Date()) + '.csv';
   } else {
     rows = [['Date', 'Category', 'Amount', 'Description']].concat(getData('expenses').map(e => [e.date, e.cat, e.amount, e.desc || '']));
@@ -1164,7 +1238,7 @@ function exportCSV(type) {
   downloadFile(rows.map(r => r.map(csvCell).join(',')).join('\n'), name, 'text/csv');
 }
 function backupJSON() {
-  const b = { app: 'moana-caisse', version: 7, exported: new Date().toISOString(), revenue: getData('revenue'), expenses: getData('expenses'), goal: getGoal() };
+  const b = { app: 'moana-caisse', version: 8, exported: new Date().toISOString(), revenue: getData('revenue'), expenses: getData('expenses'), goal: getGoal() };
   downloadFile(JSON.stringify(b, null, 2), 'moana_backup_' + dayKey(new Date()) + '.json', 'application/json');
   localStorage.setItem('moana_last_backup', new Date().toISOString());
   updateBackupNote();
