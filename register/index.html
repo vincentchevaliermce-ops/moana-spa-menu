@@ -355,11 +355,53 @@ nav {
 .celebrate .t2 { font-family: var(--serif); font-size: 56px; font-weight: 700; line-height: 1.05; margin: 6px 0; }
 .celebrate .t3 { font-size: 15px; color: #FBF6EC; }
 @keyframes rise { from { transform: translateY(30px) scale(.9); opacity: 0; } to { transform: none; opacity: 1; } }
+/* ===== Closed register (24 Oct 2026): sales move to NoShow, this tablet keeps its history read-only ===== */
+.closed-bar { display: none; }
+body.closed .closed-bar { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap;
+  background: #F3DFA8; color: var(--ink); font-size: 13.5px; font-weight: 600; padding: 9px 16px; }
+.closed-bar a { background: var(--ink); color: #F3DFA8; text-decoration: none; border-radius: 10px; padding: 7px 12px; font-size: 13px; white-space: nowrap; }
+.closed-bar button { text-decoration: underline; font-size: 13px; font-weight: 500; }
+body.closed #nb-entry, body.closed .dock, body.closed .del, body.closed .exp-card,
+body.closed .restore-btn, body.closed #view-entry, body.closed #d-roi { display: none !important; }
+body.closed, body.closed.has-ticket { padding-bottom: calc(var(--nav-h) + env(safe-area-inset-bottom)); }
+.retired { position: fixed; inset: 0; z-index: 200; display: none; align-items: center; justify-content: center; padding: 16px;
+  background: rgba(42,34,24,.72); -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px); }
+.retired.show { display: flex; }
+.retired .rbox { background: var(--card); border-radius: 22px; box-shadow: var(--shadow-lg); max-width: 460px; width: 100%;
+  max-height: calc(100vh - 32px); overflow: auto; padding: 26px 22px 18px; text-align: center; }
+.retired .rk { font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: var(--brass-deep); font-weight: 600; }
+.retired h1 { font-family: var(--serif); font-size: 34px; line-height: 1.05; color: var(--ink); margin: 6px 0 10px; }
+.retired p { font-size: 15px; line-height: 1.45; color: var(--text); margin-bottom: 16px; }
+.retired .go { display: block; text-decoration: none; font-size: 17px; padding: 15px; border-radius: 14px; margin-bottom: 18px; }
+.retired .open-t { background: #FBEDE9; color: #8E3527; border-radius: 12px; padding: 10px 12px; font-size: 14px; line-height: 1.4; margin-bottom: 14px; text-align: left; }
+.retired .keep { border-top: 1px solid var(--line); padding-top: 14px; font-size: 13.5px; color: var(--muted); line-height: 1.45; margin-bottom: 10px; }
+.retired .keep b { color: var(--ink); }
+.retired .row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 8px; }
+.retired .later { margin-top: 14px; font-size: 14px; text-decoration: underline; color: var(--muted); padding: 6px; }
 </style>
 </head>
 <body>
 
+<div class="retired" id="retired" role="dialog" aria-modal="true" aria-labelledby="r-title">
+  <div class="rbox">
+    <div class="rk">Moana Beauty Spa</div>
+    <h1 id="r-title">This register is closed</h1>
+    <p>From 24 October 2026, charge every client in the <b>NoShow</b> app: tap <b>Paid</b> on her booking, or <b>Sales → Add a sale</b>.</p>
+    <a class="btn gold go" href="https://noshow-moana.vincent-chevalier-mce.workers.dev/app">Open NoShow</a>
+    <div class="open-t" id="r-open" hidden></div>
+    <div class="keep" id="r-keep">Old sales stay saved on this tablet.</div>
+    <button class="btn ghost" style="width:100%" onclick="backupJSON()">Download full backup (JSON)</button>
+    <div class="row">
+      <button class="btn ghost" onclick="exportCSV('revenue')">Sales CSV</button>
+      <button class="btn ghost" onclick="exportCSV('expenses')">Expenses CSV</button>
+    </div>
+    <button class="later" onclick="hideRetired()">See old numbers (read only)</button>
+  </div>
+</div>
+
 <header>
+  <div class="closed-bar"><span>Register closed · old numbers, read only</span>
+    <span><button onclick="showRetired()">Backup</button> &nbsp; <a href="https://noshow-moana.vincent-chevalier-mce.workers.dev/app">Charge in NoShow</a></span></div>
   <div class="wrap head-row">
     <div class="brand gold-text">MOANA<small>BEAUTY SPA · REGISTER</small></div>
     <div class="head-stats">
@@ -433,7 +475,7 @@ nav {
         <button class="btn gold full" onclick="backupJSON()">Full backup (JSON)</button>
         <button class="btn ghost" onclick="exportCSV('revenue')">Sales CSV</button>
         <button class="btn ghost" onclick="exportCSV('expenses')">Expenses CSV</button>
-        <button class="btn ghost full" onclick="document.getElementById('restore-file').click()">Restore from backup</button>
+        <button class="btn ghost full restore-btn" onclick="document.getElementById('restore-file').click()">Restore from backup</button>
         <input type="file" id="restore-file" accept=".json,application/json" style="display:none" onchange="restoreJSON(this)">
       </div>
     </div>
@@ -450,7 +492,7 @@ nav {
 
   <!-- EXPENSES -->
   <section id="view-expenses" class="view">
-    <div class="card">
+    <div class="card exp-card">
       <div class="section-title">Add expense</div>
       <div class="exp-form">
         <select id="e-cat">
@@ -528,6 +570,8 @@ nav {
 <div class="toast" id="toast"><span class="ok">✓</span><span id="toast-t">Saved</span><button onclick="undoLast()">UNDO</button></div>
 
 <script>
+// Closed on 24 Oct 2026: every sale is now charged in NoShow. History stays on this tablet, read only.
+const RETIRED = true;
 // ============= MENU (aligned with moanabeautyspa-phnompenh.com/price-list, Oct 2026) =============
 // price: null = "on request" (price typed at checkout)
 const SERVICES = {
@@ -907,6 +951,7 @@ function renderSrc() {
   $('t-src').classList.toggle('ask', !src);
 }
 function addLine(i) {
+  if (RETIRED) { showRetired(); return; }
   const s = window._tiles[i];
   ticket.push({ name: s.name, cat: s.cat, price: s.price == null ? null : s.price, list: s.price == null ? null : s.price });
   playSound(BIG_FART.includes(s.name) ? 'asmr' : 'add');
@@ -916,6 +961,7 @@ function addLine(i) {
   if (s.price == null) openDetail();
 }
 function addCustom() {
+  if (RETIRED) { showRetired(); return; }
   ticket.push({ name: '', cat: 'other', price: null, list: null, custom: true });
   saveTicket(); renderTicket(); renderTiles(); openDetail();
 }
@@ -994,6 +1040,7 @@ function closeDetail() { $('dock').classList.remove('open'); $('t-edit').textCon
 // ============= CHECKOUT =============
 let lastTicketId = null, toastTimer = null;
 function checkout(method) {
+  if (RETIRED) { showRetired(); return; }
   if (!ticketReady()) { openDetail(); return; }
   if (!src) { renderTicketSummary(); return; }
   const now = new Date(), tid = Date.now();
@@ -1205,6 +1252,7 @@ function renderHistory() {
   }).join('');
 }
 function deleteTicket(k) {
+  if (RETIRED) return;
   const all = getData('revenue');
   const lines = all.filter(e => String(clientKey(e)) === String(k));
   if (!lines.length) return;
@@ -1215,6 +1263,7 @@ function deleteTicket(k) {
 
 // ============= EXPENSES =============
 function addExpense() {
+  if (RETIRED) { showRetired(); return; }
   const cat = $('e-cat').value, amount = parseFloat($('e-amt').value), desc = $('e-desc').value.trim();
   if (!amount || amount <= 0) { alert('Enter a valid amount'); return; }
   const data = getData('expenses');
@@ -1225,6 +1274,7 @@ function addExpense() {
 }
 // Fixed monthly rent ($700) and sublease income ($280), added once per month
 function checkFixedExpenses() {
+  if (RETIRED) return;   // rent is now entered in NoShow
   const now = new Date();
   const mk = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0');
   const first = new Date(now.getFullYear(), now.getMonth(), 1).toISOString();
@@ -1251,6 +1301,7 @@ function renderExpenses() {
   ).join('') : '<div class="empty">No expenses this month</div>';
 }
 function deleteExpense(id) {
+  if (RETIRED) return;
   if (!confirm('Delete this expense?')) return;
   setData('expenses', getData('expenses').filter(e => e.id !== id));
   renderExpenses();
@@ -1285,6 +1336,7 @@ function updateBackupNote() {
   el.className = 'backup-note' + (days > 7 ? ' warn' : '');
 }
 function restoreJSON(input) {
+  if (RETIRED) { input.value = ''; return; }
   const file = input.files[0];
   if (!file) return;
   const reader = new FileReader();
@@ -1319,6 +1371,27 @@ if ('serviceWorker' in navigator) {
   navigator.serviceWorker.addEventListener('controllerchange', () => { if (reloaded) return; reloaded = true; window.location.reload(); });
 }
 
+// ============= CLOSED REGISTER =============
+function renderRetired() {
+  const rev = getData('revenue');
+  if (rev.length) {
+    const ds = rev.map(e => new Date(e.date)).filter(d => !isNaN(d)).sort((a, b) => a - b);
+    const f = d => d.toLocaleDateString('en', { day: 'numeric', month: 'short', year: 'numeric' });
+    $('r-keep').innerHTML = 'Old sales stay saved on this tablet: <b>' + plural(clients(rev), 'client') + ', ' + money(sum(rev)) + '</b>' +
+      (ds.length ? ', from ' + f(ds[0]) + ' to ' + f(ds[ds.length - 1]) : '') + '. Download a backup once and send it to Vincent.';
+  } else {
+    $('r-keep').textContent = 'No old sales on this tablet.';
+  }
+  const open = ticket.filter(l => l && l.name);
+  if (open.length) {
+    $('r-open').hidden = false;
+    $('r-open').innerHTML = '<b>Not charged yet on this tablet:</b> ' + esc(open.map(l => l.name).join(' + ')) +
+      (subtotal() > 0 ? ', ' + money(subtotal()) : '') + '. If the client has not paid, charge her in NoShow.';
+  } else $('r-open').hidden = true;
+}
+function showRetired() { renderRetired(); $('retired').classList.add('show'); }
+function hideRetired() { $('retired').classList.remove('show'); showView('dashboard'); }
+
 // ============= INIT =============
 function refreshAll() {
   updateHeader(); renderCats(); renderTiles(); renderTicket();
@@ -1331,6 +1404,7 @@ refreshAll();
 // keep "today" correct if the tablet stays open past midnight
 setInterval(updateHeader, 60 * 1000);
 if (location.hash === '#dashboard') showView('dashboard');
+if (RETIRED) { document.body.classList.add('closed'); showView('dashboard'); showRetired(); }
 </script>
 </body>
 </html>
