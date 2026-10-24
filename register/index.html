@@ -53,7 +53,7 @@ body {
   font-size: 15px;
   padding-bottom: calc(var(--nav-h) + env(safe-area-inset-bottom));
 }
-body.has-ticket { padding-bottom: calc(var(--nav-h) + 200px + env(safe-area-inset-bottom)); }
+body.has-ticket { padding-bottom: calc(var(--nav-h) + 245px + env(safe-area-inset-bottom)); }
 button { font-family: inherit; color: inherit; border: 0; background: none; cursor: pointer; }
 input, select { font-family: inherit; }
 .wrap { max-width: 1100px; margin: 0 auto; padding: 0 16px; }
@@ -182,6 +182,13 @@ header {
 .srcs .s { flex: none; padding: 9px 13px; border-radius: 999px; background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.10); font-size: 13.5px; color: #EDE3CC; white-space: nowrap; }
 .srcs .s.on { background: #F3DFA8; border-color: #F3DFA8; color: var(--ink); font-weight: 600; }
 .srcs.ask .s { border-color: rgba(240,194,122,.55); }
+.refrow { display: flex; align-items: center; gap: 8px; padding: 0 18px 10px; font-size: 12.5px; color: #A99C80; }
+.refrow label { display: flex; align-items: center; gap: 6px; letter-spacing: 1.2px; text-transform: uppercase; font-size: 10.5px; }
+.refrow .pre { color: #EDE3CC; font-size: 14px; letter-spacing: 0; text-transform: none; }
+.refrow input { width: 86px; background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.14); border-radius: 10px; color: #fff; padding: 7px 9px; font-size: 15px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; }
+.refrow input.gads { border-color: #F3DFA8; box-shadow: 0 0 0 2px rgba(243,223,168,.25); }
+.refrow .hint { color: #A99C80; }
+.refrow .hint b { color: #F3DFA8; font-weight: 600; }
 .pays { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; padding: 0 12px 12px; }
 .pay {
   border-radius: 14px; padding: 13px 4px; font-size: 15px; font-weight: 600; color: #fff;
@@ -486,6 +493,9 @@ nav {
       <button class="tool danger" onclick="clearTicket()">Clear</button>
     </div>
     <div class="srcs" id="t-src"></div>
+    <div class="refrow"><label for="t-ref">Ref <span class="pre">MB-</span></label>
+      <input id="t-ref" inputmode="text" autocomplete="off" autocapitalize="characters" placeholder="optional" oninput="setRef(this.value)">
+      <span class="hint" id="t-ref-hint">From the WhatsApp message. <b>G…</b> = Google ad</span></div>
     <div class="pays" id="pays">
       <button class="pay pm-cash" onclick="checkout('Cash')">Cash</button>
       <button class="pay pm-aba" onclick="checkout('ABA')">ABA</button>
@@ -868,11 +878,27 @@ function renderTiles() {
 let ticket = loadTicket();
 let disc = loadDisc(); // { type: 'none'|'pct'|'amt', value }
 let src = loadSrc();   // '' until staff taps where the client comes from
+let ref = loadRef();   // code after "MB-" in the client's message (site adds "Ref: MB-XXXX"); G... = came from a Google ad
 function loadTicket() { try { return JSON.parse(localStorage.getItem('moana_ticket')) || []; } catch (e) { return []; } }
 function loadDisc() { try { return JSON.parse(localStorage.getItem('moana_ticket_disc')) || { type: 'none', value: 0 }; } catch (e) { return { type: 'none', value: 0 }; } }
 function loadSrc() { try { const s = localStorage.getItem('moana_ticket_src') || ''; return SOURCES.includes(s) ? s : ''; } catch (e) { return ''; } }
+function cleanRef(v) { return String(v || '').toUpperCase().replace(/^\s*(REF:?\s*)?(MB-?)?/, '').replace(/[^A-Z0-9]/g, '').slice(0, 6); }
+function loadRef() { try { return cleanRef(localStorage.getItem('moana_ticket_ref')); } catch (e) { return ''; } }
 function saveTicket() {
-  try { localStorage.setItem('moana_ticket', JSON.stringify(ticket)); localStorage.setItem('moana_ticket_disc', JSON.stringify(disc)); localStorage.setItem('moana_ticket_src', src); } catch (e) {}
+  try { localStorage.setItem('moana_ticket', JSON.stringify(ticket)); localStorage.setItem('moana_ticket_disc', JSON.stringify(disc)); localStorage.setItem('moana_ticket_src', src); localStorage.setItem('moana_ticket_ref', ref); } catch (e) {}
+}
+// Typing a ref that starts with G selects "Google Ads" (the website gives ad visitors G codes only)
+function setRef(v) {
+  ref = cleanRef(v);
+  const inp = $('t-ref'); if (inp && inp.value !== ref) inp.value = ref;
+  if (ref.length >= 4 && ref[0] === 'G' && src !== 'Google Ads') { src = 'Google Ads'; renderSrc(); }
+  saveTicket(); renderRefHint(); renderTicketSummary();
+}
+function renderRefHint() {
+  const inp = $('t-ref'), h = $('t-ref-hint'); if (!inp || !h) return;
+  const g = ref.length >= 4 && ref[0] === 'G';
+  inp.classList.toggle('gads', g);
+  h.innerHTML = g ? '<b>Google ad confirmed</b> by the ref' : 'From the WhatsApp message. <b>G…</b> = Google ad';
 }
 function setSrc(s) { src = src === s ? '' : s; saveTicket(); renderSrc(); renderTicketSummary(); }
 function renderSrc() {
@@ -893,7 +919,7 @@ function addCustom() {
   ticket.push({ name: '', cat: 'other', price: null, list: null, custom: true });
   saveTicket(); renderTicket(); renderTiles(); openDetail();
 }
-function removeLine(i) { ticket.splice(i, 1); if (!ticket.length) { disc = { type: 'none', value: 0 }; src = ''; } saveTicket(); renderTicket(); renderTiles(); }
+function removeLine(i) { ticket.splice(i, 1); if (!ticket.length) { disc = { type: 'none', value: 0 }; src = ''; ref = ''; } saveTicket(); renderTicket(); renderTiles(); }
 function setLinePrice(i, v) {
   const n = parseFloat(v);
   ticket[i].price = isNaN(n) || n < 0 ? null : r2(n);
@@ -903,7 +929,7 @@ function setLinePrice(i, v) {
 function setLineName(i, v) { ticket[i].name = v; saveTicket(); renderTicketSummary(); }
 function clearTicket() {
   if (ticket.length > 1 && !confirm('Clear this ticket?')) return;
-  ticket = []; disc = { type: 'none', value: 0 }; src = ''; saveTicket(); closeDetail(); renderTicket(); renderTiles();
+  ticket = []; disc = { type: 'none', value: 0 }; src = ''; ref = ''; saveTicket(); closeDetail(); renderTicket(); renderTiles();
 }
 function setDisc(type, value) {
   if (type === 'amt') {
@@ -940,6 +966,7 @@ function renderTicketSummary() {
 }
 function renderTicket() {
   const show = ticket.length > 0;
+  if ($('t-ref') && $('t-ref').value !== ref) $('t-ref').value = ref;
   $('dock').classList.toggle('show', show);
   document.body.classList.toggle('has-ticket', show);
   if (!show) { closeDetail(); return; }
@@ -956,6 +983,8 @@ function renderTicket() {
     '<button class="o' + ((disc.type === t && (t !== 'pct' || disc.value === v)) ? ' on' : '') + '" onclick="setDisc(\'' + t + '\',' + v + ')">' + label + '</button>'
   ).join('');
   renderSrc();
+  if ($('t-ref') && $('t-ref').value !== ref) $('t-ref').value = ref;
+  renderRefHint();
   renderTicketSummary();
 }
 function toggleDetail() { $('dock').classList.contains('open') ? closeDetail() : openDetail(); }
@@ -982,13 +1011,14 @@ function checkout(method) {
     };
     if (l.list != null && l.list !== e.price) e.list = l.list;
     if (share > 0) e.disc = share;
+    if (ref.length >= 4) e.ref = 'MB-' + ref;
     return e;
   });
   const data = getData('revenue');
   setData('revenue', data.concat(entries));
   lastTicketId = tid;
   const total = ticketTotal();
-  ticket = []; disc = { type: 'none', value: 0 }; src = ''; saveTicket();
+  ticket = []; disc = { type: 'none', value: 0 }; src = ''; ref = ''; saveTicket();
   closeDetail(); renderTicket(); renderTiles(); updateHeader();
   $('toast-t').textContent = money(total) + ' · ' + method + ' · saved';
   $('toast').classList.add('show');
@@ -1011,6 +1041,7 @@ function undoLast() {
   ticket = removed.map(e => ({ name: e.name, cat: e.cat, price: e.list != null ? e.list : r2(e.price + (e.disc || 0)), list: e.list != null ? e.list : r2(e.price + (e.disc || 0)), custom: e.cat === 'other' }));
   disc = { type: 'none', value: 0 };
   src = removed.length && SOURCES.includes(removed[0].src) ? removed[0].src : '';
+  ref = removed.length && removed[0].ref ? cleanRef(removed[0].ref) : '';
   saveTicket();
   lastTicketId = null;
   $('toast').classList.remove('show');
@@ -1133,7 +1164,9 @@ function renderSources(m, mExpenses) {
   const g = by['Google Ads'] || { t: new Set(), rev: 0 };
   const spend = r2(mExpenses.filter(e => e.cat === 'Google Ads').reduce((s, e) => s + e.amount, 0));
   const rev = r2(g.rev), n = g.t.size;
-  let html = '<b>Google Ads this month</b><br>' + plural(n, 'client') + ' · ' + money(rev) + ' revenue · ' + money(spend) + ' spent';
+  const withRef = new Set(m.filter(e => e.src === 'Google Ads' && /^MB-G/.test(e.ref || '')).map(clientKey)).size;
+  let html = '<b>Google Ads this month</b><br>' + plural(n, 'client') + ' · ' + money(rev) + ' revenue · ' + money(spend) + ' spent' +
+    (n ? '<br><span style="color:var(--muted)">' + withRef + ' of ' + n + ' confirmed by a G ref</span>' : '');
   if (spend > 0) {
     const ratio = rev / spend;
     html += '<div class="big ' + (ratio >= 1 ? 'green' : 'red') + '">' + money(ratio) + ' back for every $1</div>' +
@@ -1162,7 +1195,7 @@ function renderHistory() {
         const p = lines[0].payment || '';
         return '<div class="tk"><div class="tk-h"><div class="m">' + new Date(lines[0].date).toLocaleTimeString('en', { hour: '2-digit', minute: '2-digit' }) +
           ' <span class="badge pm-' + esc(p.toLowerCase()) + '">' + esc(p) + '</span>' +
-          (lines[0].src ? ' <span class="srctag' + (lines[0].src === 'Google Ads' ? ' gads' : '') + '">' + esc(lines[0].src) + '</span>' : '') + '</div>' +
+          (lines[0].src ? ' <span class="srctag' + (lines[0].src === 'Google Ads' ? ' gads' : '') + '">' + esc(lines[0].src) + (lines[0].ref ? ' · ' + esc(lines[0].ref) : '') + '</span>' : '') + '</div>' +
           '<div style="display:flex;align-items:center;gap:10px"><span class="a">' + money(sum(lines)) + '</span>' +
           '<button class="del" onclick="deleteTicket(\'' + k + '\')">✕</button></div></div>' +
           lines.map(e => '<div class="tk-l"><span class="x"><i style="background:' + (CAT[e.cat] || CAT.other).color + '"></i>' + esc(e.name) + '</span>' +
@@ -1228,8 +1261,8 @@ function csvCell(v) { v = v == null ? '' : String(v); return /[",\n]/.test(v) ? 
 function exportCSV(type) {
   let rows, name;
   if (type === 'revenue') {
-    rows = [['Date', 'Local day', 'Ticket', 'Service', 'Category', 'Menu price', 'Discount', 'Paid', 'Payment', 'Source']]
-      .concat(getData('revenue').map(e => [e.date, dayKey(e.date), e.ticket || e.id, e.name, e.cat, e.list != null ? e.list : e.price, e.disc || 0, e.price, e.payment, e.src || '']));
+    rows = [['Date', 'Local day', 'Ticket', 'Service', 'Category', 'Menu price', 'Discount', 'Paid', 'Payment', 'Source', 'Ref']]
+      .concat(getData('revenue').map(e => [e.date, dayKey(e.date), e.ticket || e.id, e.name, e.cat, e.list != null ? e.list : e.price, e.disc || 0, e.price, e.payment, e.src || '', e.ref || '']));
     name = 'moana_sales_' + dayKey(new Date()) + '.csv';
   } else {
     rows = [['Date', 'Category', 'Amount', 'Description']].concat(getData('expenses').map(e => [e.date, e.cat, e.amount, e.desc || '']));
