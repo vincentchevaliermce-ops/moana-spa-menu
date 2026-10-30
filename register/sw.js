@@ -1,4 +1,4 @@
-const CACHE_NAME = 'moana-caisse-v8-closed';
+const CACHE_NAME = 'moana-caisse-v8b-closed';
 
 // Network with timeout: on slow connections, fall back to cache quickly
 function fetchWithTimeout(req, ms) {
